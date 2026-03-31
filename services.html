@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="From custom websites and web apps to workflow automation, The Agent Sees offers the digital services your business needs to grow online and operate smarter." />
+<meta property="og:title" content="Services | The Agent Sees" />
+<meta property="og:description" content="Custom websites, web apps, and workflow automation built to help your business grow online and operate smarter." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="services.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Services | The Agent Sees" />
+<meta name="twitter:description" content="Custom websites, web apps, and workflow automation built to help your business grow online and operate smarter." />
+<title>Services | The Agent Sees</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* PAGE-SPECIFIC STYLES */
+
+  /* Page Hero */
+  .page-hero {
+    background: var(--ink);
+    padding: 10rem 3rem 6rem;
+    text-align: center;
+  }
+  .page-hero .eyebrow {
+    font-family: var(--display);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+  .page-hero h1 {
+    font-family: var(--display);
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    margin-bottom: 1.5rem;
+  }
+  .page-hero h1 em {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--accent);
+  }
+  .page-hero .hero-sub {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: rgba(245,242,236,0.5);
+    max-width: 55ch;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  /* Service Sections */
+  .service-section {
+    padding: 6rem 3rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .service-section:last-of-type {
+    border-bottom: none;
+  }
+  .service-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .service-section:nth-child(even) .service-grid {
+    direction: rtl;
+  }
+  .service-section:nth-child(even) .service-grid > * {
+    direction: ltr;
+  }
+  .service-text .svc-number {
+    font-family: var(--display);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .service-text h2 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: 0.02em;
+    line-height: 1.05;
+    margin-bottom: 1.25rem;
+  }
+  .service-text p {
+    font-size: 1rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.85;
+    margin-bottom: 1.75rem;
+    max-width: 50ch;
+  }
+  .service-image {
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .service-image img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    display: block;
+    border-radius: 4px;
+    transition: transform 0.5s ease;
+  }
+  .service-image:hover img {
+    transform: scale(1.03);
+  }
+
+  /* Deliverable Pills */
+  .deliverables {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .deliverable-pill {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    color: var(--muted);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .deliverable-pill:hover {
+    border-color: var(--accent);
+    color: var(--ink);
+  }
+
+  .service-link {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: gap 0.3s;
+  }
+  .service-link:hover {
+    gap: 1rem;
+  }
+
+  /* FEATURED — Service 3 Automation */
+  .service-section.featured {
+    background: var(--ink);
+    padding: 7rem 3rem;
+    border-bottom: none;
+  }
+  .service-section.featured .service-text h2 {
+    color: var(--paper);
+  }
+  .service-section.featured .service-text p {
+    color: rgba(245,242,236,0.5);
+  }
+  .service-section.featured .svc-number {
+    color: var(--accent2);
+  }
+  .service-section.featured .deliverable-pill {
+    border-color: rgba(245,242,236,0.15);
+    color: rgba(245,242,236,0.5);
+  }
+  .service-section.featured .deliverable-pill:hover {
+    border-color: var(--accent);
+    color: var(--paper);
+  }
+  .service-section.featured .service-link {
+    color: var(--accent2);
+  }
+  .service-section.featured .service-image {
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+  }
+  .service-section.featured .featured-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: var(--paper);
+    padding: 0.35rem 0.85rem;
+    border-radius: 2px;
+    margin-bottom: 1rem;
+  }
+
+  /* Automation Stack Sub-grid */
+  .automation-stack {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .automation-stack h3 {
+    font-family: var(--display);
+    font-size: 1rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--paper);
+    margin-bottom: 1rem;
+  }
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+  }
+  .stack-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    background: rgba(245,242,236,0.05);
+    border: 1px solid rgba(245,242,236,0.1);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: rgba(245,242,236,0.7);
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .stack-item:hover {
+    border-color: var(--accent);
+    color: var(--paper);
+  }
+
+  /* CTA Banner */
+  .cta-banner {
+    background: var(--ink);
+    padding: 6rem 3rem;
+    text-align: center;
+  }
+  .cta-banner h2 {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    margin-bottom: 2rem;
+  }
+  .cta-banner .btn-primary {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--paper);
+    background: var(--accent);
+    padding: 1rem 2.5rem;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+  .cta-banner .btn-primary:hover {
+    background: #c43018;
+  }
+
+  /* Nav Dark Override */
+  .nav-dark {
+    mix-blend-mode: normal;
+  }
+  .nav-dark .nav-logo {
+    color: var(--paper);
+  }
+  .nav-dark .nav-links a {
+    color: rgba(245,242,236,0.7);
+  }
+  .nav-dark .nav-links a:hover {
+    color: var(--paper);
+  }
+  .nav-dark .nav-cta {
+    background: var(--accent);
+    color: var(--paper);
+  }
+  .nav-dark .nav-cta:hover {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .page-hero { padding: 8rem 1.5rem 4rem; }
+    .service-section { padding: 4rem 1.5rem; }
+    .service-grid {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .service-section:nth-child(even) .service-grid {
+      direction: ltr;
+    }
+    .service-image img {
+      height: 280px;
+    }
+    .stack-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .cta-banner { padding: 4rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav class="nav-dark">
+  <a href="index.html" class="nav-logo">THE AGENT SEES</a>
+  <ul class="nav-links">
+    <li><a href="services.html">Services</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="automation.html">Automation</a></li>
+    <li><a href="index.html#about">About</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Start a Project</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="eyebrow fade-up">Our Services</div>
+  <h1 class="fade-up">We Design, Build<br>& <em>Automate</em></h1>
+  <p class="hero-sub fade-up">Pixel-perfect websites. Intelligent workflow automation. We build the digital engine that runs your business on autopilot.</p>
+</section>
+
+<!-- SERVICE 1 — Custom Websites -->
+<section class="service-section">
+  <div class="service-grid">
+    <div class="service-text fade-up">
+      <div class="svc-number">01</div>
+      <h2>Custom Websites</h2>
+      <p>Responsive, high-performance websites built with Next.js, Astro, or custom stacks. Designed to convert visitors and rank on search engines.</p>
+      <div class="deliverables">
+        <span class="deliverable-pill">Landing pages</span>
+        <span class="deliverable-pill">Corporate sites</span>
+        <span class="deliverable-pill">Portfolio sites</span>
+        <span class="deliverable-pill">Marketing sites</span>
+        <span class="deliverable-pill">CMS integration</span>
+        <span class="deliverable-pill">SEO optimization</span>
+      </div>
+      <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
+    </div>
+    <div class="service-image fade-up">
+      <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=700&q=80" alt="Custom website design on screen" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 2 — Web Applications -->
+<section class="service-section">
+  <div class="service-grid">
+    <div class="service-text fade-up">
+      <div class="svc-number">02</div>
+      <h2>Web Applications</h2>
+      <p>Full-stack web apps that scale. Internal dashboards, customer portals, complete SaaS platforms. Built with React, Node.js, Python, and bulletproof cloud infrastructure.</p>
+      <div class="deliverables">
+        <span class="deliverable-pill">SaaS platforms</span>
+        <span class="deliverable-pill">Admin dashboards</span>
+        <span class="deliverable-pill">Customer portals</span>
+        <span class="deliverable-pill">Internal tools</span>
+        <span class="deliverable-pill">Real-time apps</span>
+        <span class="deliverable-pill">Database design</span>
+      </div>
+      <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
+    </div>
+    <div class="service-image fade-up">
+      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80" alt="Web application dashboard analytics" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 3 — Workflow Automation (FEATURED) -->
+<section class="service-section featured">
+  <div class="service-grid">
+    <div class="service-text fade-up">
+      <span class="featured-badge">Our Superpower</span>
+      <div class="svc-number">03</div>
+      <h2>Workflow Automation</h2>
+      <p>This is what sets us apart. We design and build automated workflows using custom APIs, automation engines, and AI agents. Simple triggers, complex multi-step agentic systems, full orchestration layer integration. We turn your manual processes into intelligent, self-running machines.</p>
+
+      <div class="automation-stack">
+        <h3>Our Automation Capabilities</h3>
+        <div class="stack-grid">
+          <div class="stack-item">Automation Engines</div>
+          <div class="stack-item">AI Agents</div>
+          <div class="stack-item">Custom Integrations</div>
+          <div class="stack-item">Orchestration Layers</div>
+          <div class="stack-item">Intelligence Frameworks</div>
+          <div class="stack-item">Custom APIs</div>
+        </div>
+      </div>
+
+      <div class="deliverables">
+        <span class="deliverable-pill">Workflow design</span>
+        <span class="deliverable-pill">AI agent development</span>
+        <span class="deliverable-pill">Orchestration layer setup</span>
+        <span class="deliverable-pill">Custom integrations</span>
+        <span class="deliverable-pill">Data pipeline automation</span>
+        <span class="deliverable-pill">Custom webhook systems</span>
+      </div>
+      <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
+    </div>
+    <div class="service-image fade-up">
+      <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=700&q=80" alt="Automated workflow systems and code" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 4 — UI/UX Design -->
+<section class="service-section">
+  <div class="service-grid">
+    <div class="service-text fade-up">
+      <div class="svc-number">04</div>
+      <h2>UI/UX Design</h2>
+      <p>User-centered design from research to high-fidelity prototypes. We design interfaces that are beautiful and intuitive.</p>
+      <div class="deliverables">
+        <span class="deliverable-pill">User research</span>
+        <span class="deliverable-pill">Wireframes</span>
+        <span class="deliverable-pill">High-fidelity mockups</span>
+        <span class="deliverable-pill">Interactive prototypes</span>
+        <span class="deliverable-pill">Design systems</span>
+        <span class="deliverable-pill">Usability testing</span>
+      </div>
+      <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
+    </div>
+    <div class="service-image fade-up">
+      <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&q=80" alt="UI/UX design wireframes and prototypes" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 5 — API Integrations -->
+<section class="service-section">
+  <div class="service-grid">
+    <div class="service-text fade-up">
+      <div class="svc-number">05</div>
+      <h2>API Integrations</h2>
+      <p>Connect your tools with custom REST and GraphQL APIs, webhooks, and middleware. Payment gateways, CRMs, AI services, and more.</p>
+      <div class="deliverables">
+        <span class="deliverable-pill">REST API development</span>
+        <span class="deliverable-pill">GraphQL APIs</span>
+        <span class="deliverable-pill">Third-party integrations</span>
+        <span class="deliverable-pill">Payment processing</span>
+        <span class="deliverable-pill">Webhook systems</span>
+        <span class="deliverable-pill">Data transformation</span>
+      </div>
+      <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
+    </div>
+    <div class="service-image fade-up">
+      <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=700&q=80" alt="Server infrastructure and API connections" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 6 — Maintenance & Support -->
+<section class="service-section">
+  <div class="service-grid">
+    <div class="service-text fade-up">
+      <div class="svc-number">06</div>
+      <h2>Maintenance & Support</h2>
+      <p>Ongoing monitoring, updates, and optimization. We keep your digital products running and evolving.</p>
+      <div class="deliverables">
+        <span class="deliverable-pill">24/7 monitoring</span>
+        <span class="deliverable-pill">Performance optimization</span>
+        <span class="deliverable-pill">Security updates</span>
+        <span class="deliverable-pill">Feature iterations</span>
+        <span class="deliverable-pill">Analytics & reporting</span>
+        <span class="deliverable-pill">SLA-backed support</span>
+      </div>
+      <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
+    </div>
+    <div class="service-image fade-up">
+      <img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=700&q=80" alt="Code monitoring and maintenance" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <h2 class="fade-up">Ready to Automate<br>Your Business?</h2>
+  <a href="index.html#contact" class="btn-primary fade-up">Start a Project</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html" class="footer-logo">THE AGENT SEES</a>
+  <ul class="footer-links">
+    <li><a href="services.html">Services</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="automation.html">Automation</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">&copy; 2026 The Agent Sees. All rights reserved.</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let ringX = 0, ringY = 0;
+  let mouseX = 0, mouseY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .service-section, .stack-item, .deliverable-pill').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+    el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+  });
+
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>

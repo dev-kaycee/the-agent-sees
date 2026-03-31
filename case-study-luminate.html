@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="How we helped Luminate launch a bold new brand identity and website that positioned them as a leader in their market and doubled their inbound enquiries." />
+<meta property="og:title" content="Luminate | Case Study | The Agent Sees" />
+<meta property="og:description" content="A bold new brand identity and website that positioned Luminate as a market leader and doubled their inbound enquiries." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="case-study-luminate.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Luminate | Case Study | The Agent Sees" />
+<meta name="twitter:description" content="A bold new brand identity and website that positioned Luminate as a market leader and doubled their inbound enquiries." />
+<title>Luminate | Case Study | The Agent Sees</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav class="nav-dark">
+  <a href="index.html" class="nav-logo">THE AGENT SEES</a>
+  <ul class="nav-links">
+    <li><a href="services.html">Services</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="automation.html">Automation</a></li>
+    <li><a href="index.html#about">About</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Start a Project</a>
+</nav>
+
+<section class="page-hero">
+  <div class="hero-eyebrow">Workflow · Automation</div>
+  <h1 class="hero-headline">Luminate</h1>
+  <p class="hero-sub">A complete workflow automation system that eliminated 40 hours of manual work per week.</p>
+</section>
+
+<div class="case-meta-bar">
+  <div class="case-meta-item">
+    <span class="case-meta-label">Client</span>
+    <span class="case-meta-val">Luminate</span>
+  </div>
+  <div class="case-meta-item">
+    <span class="case-meta-label">Industry</span>
+    <span class="case-meta-val">Creative Agency</span>
+  </div>
+  <div class="case-meta-item">
+    <span class="case-meta-label">Services</span>
+    <span class="case-meta-val">Workflow Automation, Custom Integrations, AI Agents</span>
+  </div>
+  <div class="case-meta-item">
+    <span class="case-meta-label">Timeline</span>
+    <span class="case-meta-val">6 weeks</span>
+  </div>
+</div>
+
+<section class="case-challenge fade-up">
+  <h2>The Challenge</h2>
+  <p>Luminate is a creative agency that was spending more time on admin than creative work. Client onboarding took 3 hours per client. Invoicing was manual. Project status updates were copy-pasted between 5 different tools.</p>
+</section>
+
+<section class="case-solution fade-up">
+  <h2>The Solution</h2>
+  <p>We built a comprehensive automation system using our proprietary orchestration layer. Client onboarding goes from form to fully set up in seconds: automated workspace creation in Notion, Slack channel setup, contract generation via PandaDoc, and welcome email sequences. For project updates, an AI-powered agent reads project data from Asana, Figma, and GitHub, then generates weekly client reports automatically. Invoice automation pulls time tracking data from Toggl through our automation engine to Xero, generating and sending invoices with zero manual input. Smart lead routing scores new inquiries with an AI agent and routes them to the right team member.</p>
+</section>
+
+<img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=1200&q=80" alt="Luminate automation workflow" class="case-full-image" loading="lazy" />
+
+<section class="case-results-section fade-up">
+  <h2>The Results</h2>
+  <div class="results-grid">
+    <div class="result-card fade-up">
+      <span class="result-number">40hrs</span>
+      <span class="result-label">Saved per week</span>
+    </div>
+    <div class="result-card fade-up">
+      <span class="result-number">30sec</span>
+      <span class="result-label">Client onboarding (was 3 hours)</span>
+    </div>
+    <div class="result-card fade-up">
+      <span class="result-number">0</span>
+      <span class="result-label">Invoicing errors since launch</span>
+    </div>
+  </div>
+</section>
+
+<div class="testimonial">
+  <blockquote class="testimonial-quote">"They automated our entire client onboarding. What used to take 3 hours now happens in 30 seconds."</blockquote>
+  <div class="testimonial-author">
+    <strong>Marcus Webb</strong>
+    Operations Lead, Luminate
+  </div>
+</div>
+
+<div class="next-project">
+  <span class="next-project-label">Next Project</span>
+  <a href="case-study-stride.html" class="next-project-link">Stride Athletics</a>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">THE AGENT SEES</a>
+  <ul class="footer-links">
+    <li><a href="services.html">Services</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="automation.html">Automation</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">&copy; 2026 The Agent Sees. All rights reserved.</div>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px'; cursor.style.top = mouseY + 'px';
+});
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.12; ringY += (mouseY - ringY) * 0.12;
+  ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+});
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

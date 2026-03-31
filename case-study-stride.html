@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="How we built Stride Athletics a high-performance e-commerce site that captured their brand energy and boosted online sales by 65% in the first three months." />
+<meta property="og:title" content="Stride Athletics | Case Study | The Agent Sees" />
+<meta property="og:description" content="A high-performance e-commerce site that captured Stride Athletics' brand energy and boosted online sales by 65%." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="case-study-stride.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Stride Athletics | Case Study | The Agent Sees" />
+<meta name="twitter:description" content="A high-performance e-commerce site that captured Stride Athletics' brand energy and boosted online sales by 65%." />
+<title>Stride Athletics | Case Study | The Agent Sees</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav class="nav-dark">
+  <a href="index.html" class="nav-logo">THE AGENT SEES</a>
+  <ul class="nav-links">
+    <li><a href="services.html">Services</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="automation.html">Automation</a></li>
+    <li><a href="index.html#about">About</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Start a Project</a>
+</nav>
+
+<section class="page-hero">
+  <div class="hero-eyebrow">Web App · Portal</div>
+  <h1 class="hero-headline">Stride Athletics</h1>
+  <p class="hero-sub">A member portal and class booking system that modernized a fitness brand's digital presence.</p>
+</section>
+
+<div class="case-meta-bar">
+  <div class="case-meta-item">
+    <span class="case-meta-label">Client</span>
+    <span class="case-meta-val">Stride Athletics</span>
+  </div>
+  <div class="case-meta-item">
+    <span class="case-meta-label">Industry</span>
+    <span class="case-meta-val">Fitness & Wellness</span>
+  </div>
+  <div class="case-meta-item">
+    <span class="case-meta-label">Services</span>
+    <span class="case-meta-val">Web App, API Integration, Automation</span>
+  </div>
+  <div class="case-meta-item">
+    <span class="case-meta-label">Timeline</span>
+    <span class="case-meta-val">10 weeks</span>
+  </div>
+</div>
+
+<section class="case-challenge fade-up">
+  <h2>The Challenge</h2>
+  <p>Stride Athletics ran 50+ weekly classes across 3 locations but managed bookings via phone and email. No-shows were at 25%, and they had no way to track member engagement or automate communications.</p>
+</section>
+
+<section class="case-solution fade-up">
+  <h2>The Solution</h2>
+  <p>We built a custom member portal with React and a Node.js backend. Features include real-time class booking with waitlists, member profiles with workout history, automated reminder emails and SMS via Twilio integration, a trainer dashboard for class management, and Stripe integration for payments and membership management. Automated workflows handle no-show tracking, re-engagement campaigns, and monthly reporting.</p>
+</section>
+
+<img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80" alt="Stride Athletics member portal" class="case-full-image" loading="lazy" />
+
+<section class="case-results-section fade-up">
+  <h2>The Results</h2>
+  <div class="results-grid">
+    <div class="result-card fade-up">
+      <span class="result-number">6%</span>
+      <span class="result-label">No-show rate (down from 25%)</span>
+    </div>
+    <div class="result-card fade-up">
+      <span class="result-number">45%</span>
+      <span class="result-label">Increase in class bookings</span>
+    </div>
+    <div class="result-card fade-up">
+      <span class="result-number">92%</span>
+      <span class="result-label">Member satisfaction score</span>
+    </div>
+  </div>
+</section>
+
+<div class="testimonial">
+  <blockquote class="testimonial-quote">"The portal changed how our members interact with us. Bookings are up, no-shows are down, and we finally have data."</blockquote>
+  <div class="testimonial-author">
+    <strong>Rachel Kim</strong>
+    Director, Stride Athletics
+  </div>
+</div>
+
+<div class="next-project">
+  <span class="next-project-label">Next Project</span>
+  <a href="case-study-meridian.html" class="next-project-link">Meridian Finance</a>
+</div>
+
+<footer>
+  <a href="index.html" class="footer-logo">THE AGENT SEES</a>
+  <ul class="footer-links">
+    <li><a href="services.html">Services</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="automation.html">Automation</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">&copy; 2026 The Agent Sees. All rights reserved.</div>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX; mouseY = e.clientY;
+  cursor.style.left = mouseX + 'px'; cursor.style.top = mouseY + 'px';
+});
+function animateRing() {
+  ringX += (mouseX - ringX) * 0.12; ringY += (mouseY - ringY) * 0.12;
+  ring.style.left = ringX + 'px'; ring.style.top = ringY + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+  el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+});
+// Scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

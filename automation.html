@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Stop wasting hours on repetitive tasks. The Agent Sees builds custom automated workflows that save your team time and cut operational costs from day one." />
+<meta property="og:title" content="Automated Workflows | The Agent Sees" />
+<meta property="og:description" content="Custom automated workflows that save your team hours every week and cut operational costs from day one." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="automation.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Automated Workflows | The Agent Sees" />
+<meta name="twitter:description" content="Custom automated workflows that save your team hours every week and cut operational costs from day one." />
+<title>Automated Workflows | The Agent Sees</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  /* ============================================
+     PAGE-SPECIFIC STYLES - Automation Page
+     ============================================ */
+
+  /* NAV DARK VARIANT */
+  .nav-dark {
+    background: var(--ink);
+    mix-blend-mode: normal;
+  }
+  .nav-dark .nav-logo { color: var(--paper); }
+  .nav-dark .nav-links a { color: rgba(245,242,236,0.6); }
+  .nav-dark .nav-links a:hover { color: var(--paper); }
+  .nav-dark .nav-links a::after { background: var(--accent); }
+  .nav-dark .nav-cta { background: var(--accent); color: #fff; }
+  .nav-dark .nav-cta:hover { background: #ff4f33; }
+
+  /* PAGE HERO */
+  .auto-hero {
+    background: var(--ink);
+    padding: 12rem 3rem 8rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .auto-hero::before {
+    content: '';
+    position: absolute;
+    top: -40%; left: -20%;
+    width: 140%;
+    height: 180%;
+    background: radial-gradient(ellipse at 50% 30%, rgba(230,60,30,0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .auto-hero-eyebrow {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    position: relative;
+    z-index: 1;
+  }
+  .auto-hero-eyebrow::before,
+  .auto-hero-eyebrow::after {
+    content: '';
+    display: inline-block;
+    width: 2rem;
+    height: 1px;
+    background: var(--accent);
+  }
+  .auto-hero-headline {
+    font-family: var(--display);
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    color: var(--paper);
+    max-width: 16ch;
+    margin: 0 auto 2rem;
+    position: relative;
+    z-index: 1;
+  }
+  .auto-hero-headline em {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--accent);
+  }
+  .auto-hero-sub {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: rgba(245,242,236,0.45);
+    max-width: 52ch;
+    margin: 0 auto 3.5rem;
+    line-height: 1.75;
+    position: relative;
+    z-index: 1;
+  }
+  .auto-hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1.1rem 2.5rem;
+    border-radius: 2px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+  .auto-hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(230,60,30,0.4);
+  }
+
+  /* WORKFLOW DIAGRAM */
+  .workflow-diagram {
+    background: #0d0d0d;
+    padding: 6rem 3rem;
+    overflow-x: auto;
+  }
+  .workflow-diagram .section-label {
+    color: var(--accent2);
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .workflow-diagram .section-label::before { display: none; }
+  .workflow-diagram .section-title {
+    color: var(--paper);
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .workflow-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: nowrap;
+  }
+  .wf-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    flex-shrink: 0;
+  }
+  .wf-node-box {
+    width: 140px;
+    height: 140px;
+    border: 1px solid rgba(245,242,236,0.1);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    background: rgba(245,242,236,0.03);
+    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    position: relative;
+  }
+  .wf-node-box:hover {
+    border-color: var(--accent);
+    background: rgba(230,60,30,0.06);
+    transform: translateY(-4px);
+  }
+  .wf-node-box svg {
+    width: 32px;
+    height: 32px;
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    fill: none;
+  }
+  .wf-node-label {
+    font-family: var(--display);
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    color: var(--paper);
+  }
+  .wf-node-sub {
+    font-size: 0.65rem;
+    color: rgba(245,242,236,0.3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .wf-arrow {
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    flex-shrink: 0;
+  }
+  .wf-arrow-line {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(230,60,30,0.6), rgba(245,166,35,0.6));
+    position: relative;
+  }
+  .wf-arrow-line::after {
+    content: '';
+    position: absolute;
+    right: -1px;
+    top: -4px;
+    border: 4px solid transparent;
+    border-left: 6px solid var(--accent2);
+  }
+
+  /* TOOLS & PLATFORMS */
+  .tools-section {
+    background: var(--paper);
+    padding: 8rem 3rem;
+  }
+  .tools-section .section-label { text-align: center; }
+  .tools-section .section-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .tools-intro {
+    text-align: center;
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 56ch;
+    margin: 0 auto 4rem;
+  }
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: var(--border);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .tool-card {
+    background: var(--paper);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: background 0.3s;
+  }
+  .tool-card:hover {
+    background: #fff;
+  }
+  .tool-card-num {
+    font-family: var(--display);
+    font-size: 4.5rem;
+    line-height: 1;
+    color: rgba(10,10,10,0.04);
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    user-select: none;
+    letter-spacing: 0.02em;
+  }
+  .tool-card-icon {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 1.5rem;
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    fill: none;
+  }
+  .tool-card-name {
+    font-family: var(--display);
+    font-size: 1.4rem;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.8rem;
+    color: var(--ink);
+  }
+  .tool-card-desc {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  /* HOW WE AUTOMATE (PROCESS) */
+  .auto-process {
+    background: var(--ink);
+    padding: 8rem 3rem;
+  }
+  .auto-process .section-label {
+    color: var(--accent2);
+  }
+  .auto-process .section-label::before {
+    background: var(--accent2);
+  }
+  .auto-process .section-title {
+    color: var(--paper);
+    margin-bottom: 4rem;
+  }
+  .auto-process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    background: rgba(245,242,236,0.06);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .auto-step {
+    background: var(--ink);
+    padding: 3.5rem 2.5rem;
+    position: relative;
+  }
+  .auto-step-number {
+    font-family: var(--display);
+    font-size: 5rem;
+    line-height: 1;
+    color: rgba(245,242,236,0.04);
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    letter-spacing: 0.02em;
+    user-select: none;
+  }
+  .auto-step-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-bottom: 2rem;
+  }
+  .auto-step-title {
+    font-family: var(--display);
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+    color: var(--paper);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+  .auto-step-desc {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: rgba(245,242,236,0.4);
+    line-height: 1.75;
+  }
+
+  /* WHAT WE AUTOMATE */
+  .use-cases {
+    background: var(--paper);
+    padding: 8rem 3rem;
+  }
+  .use-cases .section-label { text-align: center; }
+  .use-cases .section-title {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .use-cases-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--border);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .use-case-item {
+    background: var(--paper);
+    padding: 2.5rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: background 0.3s;
+  }
+  .use-case-item:hover {
+    background: #fff;
+  }
+  .use-case-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .use-case-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+
+  /* TESTIMONIAL - reuse base styles, just declare section */
+  .auto-testimonial {
+    background: var(--accent);
+    padding: 8rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .auto-testimonial::before {
+    content: '\201C';
+    position: absolute;
+    top: -2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--serif);
+    font-size: 24rem;
+    line-height: 1;
+    color: rgba(0,0,0,0.08);
+    pointer-events: none;
+    user-select: none;
+  }
+  .auto-testimonial .testimonial-quote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+    color: #fff;
+    line-height: 1.4;
+    max-width: 28ch;
+    margin: 0 auto 3rem;
+    position: relative;
+    z-index: 1;
+  }
+  .auto-testimonial .testimonial-author {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    position: relative;
+    z-index: 1;
+  }
+  .auto-testimonial .testimonial-author strong {
+    display: block;
+    font-size: 0.9rem;
+    color: #fff;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* CTA SECTION */
+  .auto-cta {
+    background: var(--ink);
+    padding: 8rem 3rem;
+    text-align: center;
+  }
+  .auto-cta .section-label {
+    color: var(--accent2);
+    text-align: center;
+  }
+  .auto-cta .section-label::before { display: none; }
+  .auto-cta .section-title {
+    color: var(--paper);
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .auto-cta-sub {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: rgba(245,242,236,0.4);
+    max-width: 48ch;
+    margin: 0 auto 3rem;
+    line-height: 1.8;
+  }
+  .auto-cta .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1.1rem 2.5rem;
+    border-radius: 2px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .auto-cta .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(230,60,30,0.4);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .auto-hero { padding: 10rem 2rem 6rem; }
+    .workflow-diagram { padding: 4rem 1.5rem; }
+    .workflow-track { flex-wrap: wrap; gap: 1.5rem; }
+    .wf-arrow { display: none; }
+    .wf-node-box { width: 120px; height: 120px; }
+    .tools-grid { grid-template-columns: repeat(2, 1fr); }
+    .auto-process-grid { grid-template-columns: repeat(2, 1fr); }
+    .use-cases-grid { grid-template-columns: 1fr; }
+    .auto-hero, .workflow-diagram, .tools-section,
+    .auto-process, .use-cases, .auto-testimonial, .auto-cta { padding-left: 2rem; padding-right: 2rem; }
+  }
+  @media (max-width: 600px) {
+    .tools-grid { grid-template-columns: 1fr; }
+    .auto-process-grid { grid-template-columns: 1fr; }
+    .workflow-track { gap: 1rem; }
+    .wf-node-box { width: 100px; height: 100px; }
+    .wf-node-box svg { width: 24px; height: 24px; }
+    .wf-node-label { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav class="nav-dark">
+  <a href="index.html" class="nav-logo">THE AGENT SEES</a>
+  <ul class="nav-links">
+    <li><a href="services.html">Services</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="automation.html">Automation</a></li>
+    <li><a href="index.html#about">About</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Start a Project</a>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="auto-hero">
+  <div class="auto-hero-eyebrow">Workflow Automation</div>
+  <h1 class="auto-hero-headline">Automated Workflows That <em>Scale</em> Your Business</h1>
+  <p class="auto-hero-sub">We design, build, and maintain intelligent automation systems that eliminate manual work, reduce errors, and let your team focus on what actually matters.</p>
+  <a href="index.html#contact" class="auto-hero-cta">
+    Get an Automation Audit
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9 4 13 8 9 12"/></svg>
+  </a>
+</section>
+
+<!-- WORKFLOW DIAGRAM -->
+<section class="workflow-diagram">
+  <div class="section-label fade-up">How It Works</div>
+  <h2 class="section-title fade-up">Inside an Automation Flow</h2>
+  <div class="workflow-track fade-up">
+    <!-- Ingest -->
+    <div class="wf-node">
+      <div class="wf-node-box">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+        <span class="wf-node-label">INGEST</span>
+      </div>
+      <span class="wf-node-sub">Multi-source input</span>
+    </div>
+    <!-- Arrow -->
+    <div class="wf-arrow"><div class="wf-arrow-line"></div></div>
+    <!-- Validate -->
+    <div class="wf-node">
+      <div class="wf-node-box">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+        <span class="wf-node-label">VALIDATE</span>
+      </div>
+      <span class="wf-node-sub">Auth & schema check</span>
+    </div>
+    <!-- Arrow -->
+    <div class="wf-arrow"><div class="wf-arrow-line"></div></div>
+    <!-- AI Classify -->
+    <div class="wf-node">
+      <div class="wf-node-box">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
+        <span class="wf-node-label">CLASSIFY</span>
+      </div>
+      <span class="wf-node-sub">AI intent & scoring</span>
+    </div>
+    <!-- Arrow -->
+    <div class="wf-arrow"><div class="wf-arrow-line"></div></div>
+    <!-- Route -->
+    <div class="wf-node">
+      <div class="wf-node-box">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+        <span class="wf-node-label">ROUTE</span>
+      </div>
+      <span class="wf-node-sub">Conditional branching</span>
+    </div>
+    <!-- Arrow -->
+    <div class="wf-arrow"><div class="wf-arrow-line"></div></div>
+    <!-- Execute -->
+    <div class="wf-node">
+      <div class="wf-node-box">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"/></svg>
+        <span class="wf-node-label">EXECUTE</span>
+      </div>
+      <span class="wf-node-sub">Parallel actions</span>
+    </div>
+    <!-- Arrow -->
+    <div class="wf-arrow"><div class="wf-arrow-line"></div></div>
+    <!-- Sync -->
+    <div class="wf-node">
+      <div class="wf-node-box">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg>
+        <span class="wf-node-label">SYNC</span>
+      </div>
+      <span class="wf-node-sub">Multi-system write</span>
+    </div>
+    <!-- Arrow -->
+    <div class="wf-arrow"><div class="wf-arrow-line"></div></div>
+    <!-- Monitor -->
+    <div class="wf-node">
+      <div class="wf-node-box">
+        <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg>
+        <span class="wf-node-label">MONITOR</span>
+      </div>
+      <span class="wf-node-sub">Logs & auto-retry</span>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS & PLATFORMS -->
+<section class="tools-section">
+  <div class="section-label fade-up">Our Capabilities</div>
+  <h2 class="section-title fade-up">What Powers Your Automation</h2>
+  <p class="tools-intro fade-up">We're platform-agnostic and results-obsessed. We pick the right engines for your exact challenge and wire them together into a system that actually works.</p>
+
+  <div class="tools-grid">
+    <!-- 1. Workflow Engines -->
+    <div class="tool-card fade-up">
+      <div class="tool-card-num">01</div>
+      <svg class="tool-card-icon" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"/></svg>
+      <div class="tool-card-name">Workflow Engines</div>
+      <div class="tool-card-desc">Self-hosted, enterprise-grade automation engines that connect your entire stack. Hundreds of integrations, zero vendor lock-in.</div>
+    </div>
+    <!-- 2. System Orchestration -->
+    <div class="tool-card fade-up">
+      <div class="tool-card-num">02</div>
+      <svg class="tool-card-icon" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"/></svg>
+      <div class="tool-card-name">System Orchestration</div>
+      <div class="tool-card-desc">We wire your databases, APIs, and internal tools into one intelligent layer. Data flows exactly where it needs to, exactly when it needs to.</div>
+    </div>
+    <!-- 3. AI Agents -->
+    <div class="tool-card fade-up">
+      <div class="tool-card-num">03</div>
+      <svg class="tool-card-icon" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z"/></svg>
+      <div class="tool-card-name">Intelligent AI Agents</div>
+      <div class="tool-card-desc">Autonomous agents that research, analyze, decide, and act on your behalf. They learn your business logic and handle the work humans shouldn't have to.</div>
+    </div>
+    <!-- 4. Multi-Step Pipelines -->
+    <div class="tool-card fade-up">
+      <div class="tool-card-num">04</div>
+      <svg class="tool-card-icon" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/></svg>
+      <div class="tool-card-name">Multi-Step Pipelines</div>
+      <div class="tool-card-desc">Complex, branching workflows for marketing, ops, and data. Conditional logic, error handling, and automatic retries all come standard.</div>
+    </div>
+    <!-- 5. Event-Driven Triggers -->
+    <div class="tool-card fade-up">
+      <div class="tool-card-num">05</div>
+      <svg class="tool-card-icon" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+      <div class="tool-card-name">Event-Driven Triggers</div>
+      <div class="tool-card-desc">Webhooks, scheduled polls, email parsers, and file watchers that fire instantly when something happens across your SaaS stack.</div>
+    </div>
+    <!-- 6. Custom API Layers -->
+    <div class="tool-card fade-up">
+      <div class="tool-card-num">06</div>
+      <svg class="tool-card-icon" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"/></svg>
+      <div class="tool-card-name">Custom API Layers</div>
+      <div class="tool-card-desc">Bespoke middleware, data transformation layers, and integration endpoints built to your exact specifications.</div>
+    </div>
+    <!-- 7. AI Reasoning Chains -->
+    <div class="tool-card fade-up">
+      <div class="tool-card-num">07</div>
+      <svg class="tool-card-icon" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg>
+      <div class="tool-card-name">AI Reasoning Chains</div>
+      <div class="tool-card-desc">Multi-step AI workflows with memory, tool access, and human-in-the-loop checkpoints for decisions that need nuance.</div>
+    </div>
+    <!-- 8. Data Automation -->
+    <div class="tool-card fade-up">
+      <div class="tool-card-num">08</div>
+      <svg class="tool-card-icon" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/></svg>
+      <div class="tool-card-name">Data Automation</div>
+      <div class="tool-card-desc">Automated ETL pipelines and real-time sync between databases, spreadsheets, and business tools. Always accurate. Always current.</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW WE AUTOMATE -->
+<section class="auto-process">
+  <div class="section-label fade-up">Our Method</div>
+  <h2 class="section-title fade-up">How We Automate</h2>
+
+  <div class="auto-process-grid">
+    <div class="auto-step fade-up">
+      <div class="auto-step-number">01</div>
+      <div class="auto-step-dot"></div>
+      <div class="auto-step-title">Audit</div>
+      <div class="auto-step-desc">We map your current workflows and identify bottlenecks, manual processes, and automation opportunities.</div>
+    </div>
+    <div class="auto-step fade-up">
+      <div class="auto-step-number">02</div>
+      <div class="auto-step-dot"></div>
+      <div class="auto-step-title">Design</div>
+      <div class="auto-step-desc">We architect the automation system, choosing the right tools and designing fail-safe flows.</div>
+    </div>
+    <div class="auto-step fade-up">
+      <div class="auto-step-number">03</div>
+      <div class="auto-step-dot"></div>
+      <div class="auto-step-title">Build</div>
+      <div class="auto-step-desc">We implement, test, and iterate on your automated workflows with real data.</div>
+    </div>
+    <div class="auto-step fade-up">
+      <div class="auto-step-number">04</div>
+      <div class="auto-step-dot"></div>
+      <div class="auto-step-title">Monitor</div>
+      <div class="auto-step-desc">We set up alerts, logging, and dashboards so you always know your automations are running.</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE AUTOMATE -->
+<section class="use-cases">
+  <div class="section-label fade-up">Use Cases</div>
+  <h2 class="section-title fade-up">What We Automate</h2>
+
+  <div class="use-cases-grid">
+    <div class="use-case-item fade-up">
+      <div class="use-case-dot"></div>
+      <div class="use-case-text">Lead capture &amp; CRM sync</div>
+    </div>
+    <div class="use-case-item fade-up">
+      <div class="use-case-dot"></div>
+      <div class="use-case-text">Invoice processing &amp; accounting</div>
+    </div>
+    <div class="use-case-item fade-up">
+      <div class="use-case-dot"></div>
+      <div class="use-case-text">Customer onboarding flows</div>
+    </div>
+    <div class="use-case-item fade-up">
+      <div class="use-case-dot"></div>
+      <div class="use-case-text">Content publishing pipelines</div>
+    </div>
+    <div class="use-case-item fade-up">
+      <div class="use-case-dot"></div>
+      <div class="use-case-text">Data extraction &amp; reporting</div>
+    </div>
+    <div class="use-case-item fade-up">
+      <div class="use-case-dot"></div>
+      <div class="use-case-text">Email sequences &amp; follow-ups</div>
+    </div>
+    <div class="use-case-item fade-up">
+      <div class="use-case-dot"></div>
+      <div class="use-case-text">Inventory management</div>
+    </div>
+    <div class="use-case-item fade-up">
+      <div class="use-case-dot"></div>
+      <div class="use-case-text">Support ticket routing</div>
+    </div>
+    <div class="use-case-item fade-up">
+      <div class="use-case-dot"></div>
+      <div class="use-case-text">Social media scheduling</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<div class="auto-testimonial">
+  <blockquote class="testimonial-quote">"They automated our entire client onboarding. What used to take 3 hours now happens in 30 seconds."</blockquote>
+  <div class="testimonial-author">
+    <strong>Marcus Webb</strong>
+    Operations Lead, Luminate
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="auto-cta">
+  <div class="section-label fade-up">Ready to Automate?</div>
+  <h2 class="section-title fade-up">Let's Eliminate<br>Your Manual Work</h2>
+  <p class="auto-cta-sub fade-up">Tell us what's slowing you down. We'll design an automation system that saves your team hours every week.</p>
+  <a href="index.html#contact" class="btn-primary fade-up">
+    Start a Project
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9 4 13 8 9 12"/></svg>
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html" class="footer-logo">THE AGENT SEES</a>
+  <ul class="footer-links">
+    <li><a href="services.html">Services</a></li>
+    <li><a href="work.html">Work</a></li>
+    <li><a href="automation.html">Automation</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">&copy; 2026 The Agent Sees. All rights reserved.</div>
+</footer>
+
+<!-- CURSOR JS -->
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let ringX = 0, ringY = 0;
+  let mouseX = 0, mouseY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .tool-card, .wf-node-box, .use-case-item').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
+    el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
+  });
+</script>
+
+<!-- SCROLL ANIMATION JS -->
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
