@@ -42,7 +42,7 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<nav>
+<nav aria-label="Main navigation">
   <a href="index.html" class="nav-logo">THE AGENT SEES</a>
   <ul class="nav-links">
     <li><a href="services.html">Services</a></li>
@@ -51,7 +51,17 @@
     <li><a href="index.html#about">About</a></li>
   </ul>
   <a href="index.html#contact" class="nav-cta">Start a Project</a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu" role="dialog" aria-label="Mobile navigation">
+  <a href="services.html">Services</a>
+  <a href="work.html">Work</a>
+  <a href="automation.html">Automation</a>
+  <a href="index.html#about">About</a>
+  <a href="index.html#contact">Start a Project</a>
+</div>
 
 <div class="legal-page">
   <h1>Privacy Policy</h1>
@@ -168,6 +178,26 @@
 </footer>
 
 <script>
+  // Mobile menu
+  const hamburger = document.querySelector('.nav-hamburger');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('active');
+    hamburger.classList.toggle('active');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      hamburger.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', 'Open menu');
+      document.body.style.overflow = '';
+    });
+  });
+
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;

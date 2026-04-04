@@ -30,7 +30,7 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
-<nav class="nav-dark">
+<nav class="nav-dark" aria-label="Main navigation">
   <a href="index.html" class="nav-logo">THE AGENT SEES</a>
   <ul class="nav-links">
     <li><a href="services.html">Services</a></li>
@@ -39,7 +39,17 @@
     <li><a href="index.html#about">About</a></li>
   </ul>
   <a href="index.html#contact" class="nav-cta">Start a Project</a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu" role="dialog" aria-label="Mobile navigation">
+  <a href="services.html">Services</a>
+  <a href="work.html">Work</a>
+  <a href="automation.html">Automation</a>
+  <a href="index.html#about">About</a>
+  <a href="index.html#contact">Start a Project</a>
+</div>
 
 <section class="page-hero">
   <div class="hero-eyebrow">Website · E-Commerce</div>
@@ -76,7 +86,7 @@
   <p>We designed and built a headless e-commerce site using Next.js and the Shopify Storefront API. Custom subscription logic, a coffee quiz for personalized recommendations, and a bean-origin story experience with scroll-driven animations. Automated order processing and inventory sync via n8n workflows connecting Shopify, their roastery software, and shipping providers.</p>
 </section>
 
-<img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80" alt="Drift Coffee e-commerce experience" class="case-full-image" loading="lazy" />
+<img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80" alt="Drift Coffee e-commerce experience" class="case-full-image" width="1200" height="800" loading="lazy" />
 
 <section class="case-results-section fade-up">
   <h2>The Results</h2>
@@ -124,6 +134,26 @@
 </footer>
 
 <script>
+  // Mobile menu
+  const hamburger = document.querySelector('.nav-hamburger');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('active');
+    hamburger.classList.toggle('active');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      hamburger.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', 'Open menu');
+      document.body.style.overflow = '';
+    });
+  });
+
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
 let ringX = 0, ringY = 0, mouseX = 0, mouseY = 0;

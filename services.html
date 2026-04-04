@@ -325,7 +325,7 @@
 <div class="cursor-ring" id="cursorRing"></div>
 
 <!-- NAV -->
-<nav class="nav-dark">
+<nav class="nav-dark" aria-label="Main navigation">
   <a href="index.html" class="nav-logo">THE AGENT SEES</a>
   <ul class="nav-links">
     <li><a href="services.html">Services</a></li>
@@ -334,7 +334,17 @@
     <li><a href="index.html#about">About</a></li>
   </ul>
   <a href="index.html#contact" class="nav-cta">Start a Project</a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu" role="dialog" aria-label="Mobile navigation">
+  <a href="services.html">Services</a>
+  <a href="work.html">Work</a>
+  <a href="automation.html">Automation</a>
+  <a href="index.html#about">About</a>
+  <a href="index.html#contact">Start a Project</a>
+</div>
 
 <!-- PAGE HERO -->
 <section class="page-hero">
@@ -361,7 +371,7 @@
       <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
     </div>
     <div class="service-image fade-up">
-      <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=700&q=80" alt="Custom website design on screen" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=700&q=80" alt="Custom website design on screen" width="700" height="467" loading="lazy" />
     </div>
   </div>
 </section>
@@ -384,7 +394,7 @@
       <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
     </div>
     <div class="service-image fade-up">
-      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80" alt="Web application dashboard analytics" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80" alt="Web application dashboard analytics" width="700" height="467" loading="lazy" />
     </div>
   </div>
 </section>
@@ -421,7 +431,7 @@
       <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
     </div>
     <div class="service-image fade-up">
-      <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=700&q=80" alt="Automated workflow systems and code" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=700&q=80" alt="Automated workflow systems and code" width="700" height="467" loading="lazy" />
     </div>
   </div>
 </section>
@@ -444,7 +454,7 @@
       <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
     </div>
     <div class="service-image fade-up">
-      <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&q=80" alt="UI/UX design wireframes and prototypes" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&q=80" alt="UI/UX design wireframes and prototypes" width="700" height="467" loading="lazy" />
     </div>
   </div>
 </section>
@@ -467,7 +477,7 @@
       <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
     </div>
     <div class="service-image fade-up">
-      <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=700&q=80" alt="Server infrastructure and API connections" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=700&q=80" alt="Server infrastructure and API connections" width="700" height="467" loading="lazy" />
     </div>
   </div>
 </section>
@@ -490,7 +500,7 @@
       <a href="index.html#contact" class="service-link">Start a Project &rarr;</a>
     </div>
     <div class="service-image fade-up">
-      <img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=700&q=80" alt="Code monitoring and maintenance" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1504639725590-34d0984388bd?w=700&q=80" alt="Code monitoring and maintenance" width="700" height="467" loading="lazy" />
     </div>
   </div>
 </section>
@@ -517,6 +527,26 @@
 </footer>
 
 <script>
+  // Mobile menu
+  const hamburger = document.querySelector('.nav-hamburger');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('active');
+    hamburger.classList.toggle('active');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      hamburger.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', 'Open menu');
+      document.body.style.overflow = '';
+    });
+  });
+
   // Custom cursor
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');

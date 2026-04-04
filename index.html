@@ -32,7 +32,7 @@
 <div class="cursor-ring" id="cursorRing"></div>
 
 <!-- NAV -->
-<nav>
+<nav aria-label="Main navigation">
   <a href="index.html" class="nav-logo">THE AGENT SEES</a>
   <ul class="nav-links">
     <li><a href="services.html">Services</a></li>
@@ -41,7 +41,17 @@
     <li><a href="#about">About</a></li>
   </ul>
   <a href="#contact" class="nav-cta">Start a Project</a>
+  <button class="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu" role="dialog" aria-label="Mobile navigation">
+  <a href="services.html">Services</a>
+  <a href="work.html">Work</a>
+  <a href="automation.html">Automation</a>
+  <a href="#about">About</a>
+  <a href="#contact">Start a Project</a>
+</div>
 
 <!-- HERO -->
 <section class="hero" id="home">
@@ -59,7 +69,7 @@
   </div>
   <div class="hero-right">
     <div class="hero-image-block">
-      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80" alt="Digital workspace with code and design" loading="lazy" />
+      <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=900&q=80" alt="Digital workspace with code and design" width="900" height="600" loading="lazy" />
       <div class="hero-image-overlay"></div>
     </div>
     <div class="hero-tag">
@@ -185,7 +195,7 @@
 
   <div class="portfolio-grid">
     <div class="port-item">
-      <img class="port-img" src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=900&q=80" alt="SaaS dashboard for Elevate Analytics" loading="lazy" />
+      <img class="port-img" src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=900&q=80" alt="SaaS dashboard for Elevate Analytics" width="900" height="600" loading="lazy" />
       <div class="port-info">
         <div class="port-cat">Web App · Dashboard</div>
         <div class="port-title">Elevate Analytics</div>
@@ -193,7 +203,7 @@
       </div>
     </div>
     <div class="port-item">
-      <img class="port-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80" alt="E-commerce platform for Drift Coffee" loading="lazy" />
+      <img class="port-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80" alt="E-commerce platform for Drift Coffee" width="600" height="400" loading="lazy" />
       <div class="port-info">
         <div class="port-cat">Website · E-Commerce</div>
         <div class="port-title">Drift Coffee</div>
@@ -201,7 +211,7 @@
       </div>
     </div>
     <div class="port-item">
-      <img class="port-img" src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&q=80" alt="Workflow automation for Luminate" loading="lazy" />
+      <img class="port-img" src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=600&q=80" alt="Workflow automation for Luminate" width="600" height="400" loading="lazy" />
       <div class="port-info">
         <div class="port-cat">Workflow · Automation</div>
         <div class="port-title">Luminate</div>
@@ -209,7 +219,7 @@
       </div>
     </div>
     <div class="port-item">
-      <img class="port-img" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80" alt="Web platform for Stride Athletics" loading="lazy" />
+      <img class="port-img" src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80" alt="Web platform for Stride Athletics" width="600" height="400" loading="lazy" />
       <div class="port-info">
         <div class="port-cat">Web App · Portal</div>
         <div class="port-title">Stride Athletics</div>
@@ -217,7 +227,7 @@
       </div>
     </div>
     <div class="port-item">
-      <img class="port-img" src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80" alt="Fintech app for Meridian Finance" loading="lazy" />
+      <img class="port-img" src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80" alt="Fintech app for Meridian Finance" width="600" height="400" loading="lazy" />
       <div class="port-info">
         <div class="port-cat">Webapp · Fintech</div>
         <div class="port-title">Meridian Finance</div>
@@ -411,7 +421,7 @@
 <section class="about" id="about">
   <div class="about-layout">
     <div class="about-visual fade-up">
-      <img class="about-img-main" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="The Agent Sees team collaborating" loading="lazy" />
+      <img class="about-img-main" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="The Agent Sees team collaborating" width="800" height="533" loading="lazy" />
       <div class="about-accent-block">
         <div class="about-accent-text">Built on<br>Clean Code</div>
       </div>
@@ -510,6 +520,26 @@
 </footer>
 
 <script>
+  // Mobile menu
+  const hamburger = document.querySelector('.nav-hamburger');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('active');
+    hamburger.classList.toggle('active');
+    hamburger.setAttribute('aria-expanded', isOpen);
+    hamburger.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('active');
+      hamburger.classList.remove('active');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', 'Open menu');
+      document.body.style.overflow = '';
+    });
+  });
+
   // Custom cursor
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
