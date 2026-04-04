@@ -2,7 +2,34 @@
   "permissions": {
     "allow": [
       "Bash(ls:*)",
-      "Bash(grep -r \"unsplash\\\\|/images\\\\|img src\\\\|background-image\\\\|\\\\.png\\\\|\\\\.jpg\\\\|\\\\.jpeg\\\\|\\\\.gif\" /Users/thabang/dev/temp/21st-dev/*.html)"
+      "Bash(grep -r \"unsplash\\\\|/images\\\\|img src\\\\|background-image\\\\|\\\\.png\\\\|\\\\.jpg\\\\|\\\\.jpeg\\\\|\\\\.gif\" /Users/thabang/dev/temp/21st-dev/*.html)",
+      "Bash(grep -E \"\\\\.\\(html|css|js|xml|txt|ico|json\\)$\")",
+      "Bash(wc -l /Users/thabang/dev/the-agent-sees/*.css /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"href=\\\\\"#\\\\\"\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"Coming Soon\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"img src\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"og:image\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"rel=\\\\\"preconnect\\\\\"\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"minified\\\\|min.js\\\\|min.css\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"async\\\\|defer\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"console\\\\\\\\.log\\\\|debugger\\\\|alert\\(\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"alt=\\\\\"\\\\\"\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"<img\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"aria-\\\\|role=\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"class=\\\\\"cursor\\\\\"\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"form\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"privacy\\\\|terms\\\\|policy\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"type=\\\\\"email\\\\\"\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"preload\\\\|font-display\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"viewport\\\\|width=device\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"onsubmit\\\\|handleSubmit\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"<form\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"button.*type=\\\\\"submit\\\\\"\\\\|input.*type=\\\\\"submit\\\\\"\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -E \"API|key|secret|token|password\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"href=\\\\\"work.html\\\\\"\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -r \"w4bzxqe8ew\" /Users/thabang/dev/the-agent-sees/*.html)",
+      "Bash(grep -E \"#[0-9a-f]{3,6}\\\\s|rgb\")",
+      "Bash(grep -r \"tabindex\\\\|aria-label\\\\|role=\\\\\"button\\\\\"\" /Users/thabang/dev/the-agent-sees/*.html)"
     ]
   }
 }

@@ -7,10 +7,12 @@
   <meta property="og:title" content="The Agent Sees | Website, Workflow & Webapp Agency" />
   <meta property="og:description" content="We build websites, web apps, and automated workflows that help growing businesses move faster and sell more." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="index.html" />
+  <meta property="og:url" content="https://theagentsees.com/" />
+  <meta property="og:image" content="https://theagentsees.com/og-image.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="The Agent Sees | Website, Workflow & Webapp Agency" />
   <meta name="twitter:description" content="We build websites, web apps, and automated workflows that help growing businesses move faster and sell more." />
+  <meta name="twitter:image" content="https://theagentsees.com/og-image.jpg" />
   <title>The Agent Sees | Website, Workflow & Webapp Agency</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -31,7 +33,7 @@
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">THE AGENT SEES</a>
+  <a href="index.html" class="nav-logo">THE AGENT SEES</a>
   <ul class="nav-links">
     <li><a href="services.html">Services</a></li>
     <li><a href="work.html">Work</a></li>
@@ -448,24 +450,28 @@
       </div>
     </div>
 
-    <form class="contact-form" onsubmit="handleSubmit(event)">
+    <form class="contact-form" action="https://formsubmit.co/sales@theagentsees.com" method="POST">
+      <input type="hidden" name="_subject" value="New project enquiry from theagentsees.com" />
+      <input type="hidden" name="_captcha" value="true" />
+      <input type="hidden" name="_next" value="https://theagentsees.com/index.html#contact" />
+      <input type="text" name="_honey" style="display:none" />
       <div class="form-row">
         <div class="form-group">
           <label for="name">Full Name</label>
-          <input type="text" id="name" placeholder="Jane Smith" required />
+          <input type="text" id="name" name="name" placeholder="Jane Smith" required />
         </div>
         <div class="form-group">
           <label for="company">Company</label>
-          <input type="text" id="company" placeholder="Acme Corp" />
+          <input type="text" id="company" name="company" placeholder="Acme Corp" />
         </div>
       </div>
       <div class="form-group">
         <label for="email">Email Address</label>
-        <input type="email" id="email" placeholder="jane@acmecorp.com" required />
+        <input type="email" id="email" name="email" placeholder="jane@acmecorp.com" required />
       </div>
       <div class="form-group">
         <label for="service">Service Interested In</label>
-        <select id="service">
+        <select id="service" name="service">
           <option value="">Select a service...</option>
           <option>Custom Website</option>
           <option>Web Application</option>
@@ -478,7 +484,7 @@
       </div>
       <div class="form-group">
         <label for="message">Tell Us About Your Project</label>
-        <textarea id="message" placeholder="What are you trying to achieve? What's the timeline and budget range?"></textarea>
+        <textarea id="message" name="message" placeholder="What are you trying to achieve? What's the timeline and budget range?"></textarea>
       </div>
       <button type="submit" class="btn-submit" id="submitBtn">
         Send Message
@@ -497,6 +503,8 @@
     <li><a href="automation.html">Automation</a></li>
     <li><a href="#about">About</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+    <li><a href="terms.html">Terms</a></li>
   </ul>
   <div class="footer-copy">© 2026 The Agent Sees. All rights reserved.</div>
 </footer>
@@ -582,20 +590,6 @@
   const nb = document.querySelector('.numbers-bar');
   if(nb) numbersObserver.observe(nb);
 
-  // Form submit
-  function handleSubmit(e) {
-    e.preventDefault();
-    const btn = document.getElementById('submitBtn');
-    btn.textContent = '✓ Message Sent!';
-    btn.style.background = '#059669';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.innerHTML = 'Send Message <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 16 16"><line x1="3" y1="8" x2="13" y2="8"/><polyline points="9 4 13 8 9 12"/></svg>';
-      btn.style.background = '';
-      btn.disabled = false;
-      e.target.reset();
-    }, 3000);
-  }
 </script>
 </body>
 </html>

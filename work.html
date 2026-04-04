@@ -7,10 +7,12 @@
 <meta property="og:title" content="Our Work | The Agent Sees" />
 <meta property="og:description" content="Real projects, real results. Browse our portfolio of websites, web apps, and automation work for growing businesses." />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="work.html" />
+<meta property="og:url" content="https://theagentsees.com/work.html" />
+<meta property="og:image" content="https://theagentsees.com/og-image.jpg" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Our Work | The Agent Sees" />
 <meta name="twitter:description" content="Real projects, real results. Browse our portfolio of websites, web apps, and automation work for growing businesses." />
+<meta name="twitter:image" content="https://theagentsees.com/og-image.jpg" />
 <title>Our Work | The Agent Sees</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -115,6 +117,8 @@
     transition: color 0.2s;
   }
   .work-card-link:hover { color: var(--accent); }
+  .work-card.coming-soon { opacity: 0.55; pointer-events: none; }
+  .coming-soon-label { color: rgba(245,242,236,0.4); cursor: default; }
 
   .work-cta {
     background: var(--paper);
@@ -217,39 +221,39 @@
       </div>
     </div>
 
-    <div class="work-card" data-category="websites">
+    <div class="work-card coming-soon" data-category="websites">
       <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&q=80" alt="GreenThread Sustainability Website" loading="lazy" />
       <div class="work-card-info">
         <div class="work-card-cat">Website · Sustainability</div>
         <div class="work-card-title">GreenThread</div>
-        <a href="#" class="work-card-link">Coming Soon</a>
+        <span class="work-card-link coming-soon-label">Coming Soon</span>
       </div>
     </div>
 
-    <div class="work-card" data-category="automation">
+    <div class="work-card coming-soon" data-category="automation">
       <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="NovaPay Payments Automation" loading="lazy" />
       <div class="work-card-info">
         <div class="work-card-cat">Automation · Payments</div>
         <div class="work-card-title">NovaPay</div>
-        <a href="#" class="work-card-link">Coming Soon</a>
+        <span class="work-card-link coming-soon-label">Coming Soon</span>
       </div>
     </div>
 
-    <div class="work-card" data-category="web-apps">
+    <div class="work-card coming-soon" data-category="web-apps">
       <img src="https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=800&q=80" alt="Atlas Learning EdTech App" loading="lazy" />
       <div class="work-card-info">
         <div class="work-card-cat">Web App · EdTech</div>
         <div class="work-card-title">Atlas Learning</div>
-        <a href="#" class="work-card-link">Coming Soon</a>
+        <span class="work-card-link coming-soon-label">Coming Soon</span>
       </div>
     </div>
 
-    <div class="work-card" data-category="automation">
+    <div class="work-card coming-soon" data-category="automation">
       <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80" alt="Helix Health Automation" loading="lazy" />
       <div class="work-card-info">
         <div class="work-card-cat">Automation · Healthcare</div>
         <div class="work-card-title">Helix Health</div>
-        <a href="#" class="work-card-link">Coming Soon</a>
+        <span class="work-card-link coming-soon-label">Coming Soon</span>
       </div>
     </div>
 
@@ -274,6 +278,8 @@
     <li><a href="automation.html">Automation</a></li>
     <li><a href="index.html#about">About</a></li>
     <li><a href="index.html#contact">Contact</a></li>
+    <li><a href="privacy.html">Privacy</a></li>
+    <li><a href="terms.html">Terms</a></li>
   </ul>
   <div class="footer-copy">© 2026 The Agent Sees. All rights reserved.</div>
 </footer>
