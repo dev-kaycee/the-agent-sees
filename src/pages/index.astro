@@ -1,0 +1,478 @@
+---
+export const prerender = true;
+
+import Base from "../components/layout/Base.astro";
+import Section from "../components/ui/Section.astro";
+import Rule from "../components/ui/Rule.astro";
+import Mark from "../components/ui/Mark.astro";
+import Button from "../components/ui/Button.astro";
+
+const services = [
+  {
+    num: "01",
+    name: "MVPs",
+    line: "Web apps you'd actually ship. 4–8 week scopes.",
+  },
+  {
+    num: "02",
+    name: "Agents",
+    line: "LLM-powered systems that act, not just answer.",
+  },
+  {
+    num: "03",
+    name: "Integrations",
+    line: "Connecting tools so your ops stop being your bottleneck.",
+  },
+];
+
+const process = [
+  { num: "01", name: "Discovery", line: "Understand the business, the user, the constraint." },
+  { num: "02", name: "Spec", line: "Write it down. Get sign-off before code." },
+  { num: "03", name: "Build", line: "Ship to a real URL early. Iterate on real feedback." },
+  { num: "04", name: "Ship", line: "Production-grade. Monitored. Handed over clean." },
+];
+
+const notes = [
+  {
+    label: "Exploring",
+    title: "Lead Qualifier",
+    subtitle: "A live demo agent — public on /work next.",
+    date: "2026-05",
+  },
+  {
+    label: "Building",
+    title: "The Agent Sees — the site itself",
+    subtitle: "An honest studio site. You're looking at it.",
+    date: "2026-05",
+  },
+];
+
+const nowBuilding = [
+  "Lead qualifier · live demo",
+  "Site rebuild · in progress",
+  "Two MVP scopes · in discovery",
+];
+---
+<Base title="The Agent Sees — AI MVPs, web apps, and agents that ship" metaMiddle="STUDIO · Nº01" metaRight="2026 →">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__inner">
+      <div class="hero__left">
+        <p class="hero__eyebrow">AI · WEBAPPS · AUTOMATION</p>
+        <h1 class="hero__head">
+          Agents that <Mark>see</Mark>.<br />
+          MVPs that ship.
+        </h1>
+        <p class="hero__sub">
+          A small studio building AI-powered MVPs, web apps, and the agents that run inside them — for founders who need to move now.
+        </p>
+        <div class="hero__cta-row">
+          <Button href="/work">See what we build</Button>
+          <Button href="/contact" variant="ghost">Get in touch</Button>
+        </div>
+      </div>
+      <aside class="hero__status" aria-label="Now building">
+        <p class="hero__status-label">Now building</p>
+        <ul>
+          {nowBuilding.map((item) => <li>{item}</li>)}
+        </ul>
+        <p class="hero__status-foot">Live updates as work changes.</p>
+      </aside>
+    </div>
+  </section>
+
+  <Rule weight="ink" />
+
+  <!-- WHAT WE BUILD -->
+  <Section label="What we build" id="what-we-build">
+    <div class="services">
+      {services.map((s) => (
+        <article class="service">
+          <span class="service__num">{s.num}</span>
+          <h3 class="service__name">{s.name}.</h3>
+          <p class="service__line">{s.line}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Rule weight="ink" />
+
+  <!-- TRY THE AGENT (demo teaser) -->
+  <Section label="Try the agent" tone="alt">
+    <div class="demo-teaser">
+      <div class="demo-teaser__copy">
+        <h2>An agent you can actually try.</h2>
+        <p>
+          Paste a hypothetical lead. Our Lead Qualifier classifies it, scores priority, suggests a next action, and drafts a reply — live on the page, in seconds.
+        </p>
+        <Button href="/work#demo">Open the demo</Button>
+      </div>
+      <div class="demo-teaser__preview" aria-hidden="true">
+        <div class="demo-teaser__field">
+          <span class="demo-teaser__field-label">classification</span>
+          <span class="demo-teaser__field-val">mvp_build</span>
+        </div>
+        <div class="demo-teaser__field">
+          <span class="demo-teaser__field-label">priority</span>
+          <span class="demo-teaser__field-val">5/5</span>
+        </div>
+        <div class="demo-teaser__field demo-teaser__field--multi">
+          <span class="demo-teaser__field-label">reasoning</span>
+          <span class="demo-teaser__field-val demo-teaser__field-val--soft">Seed-stage SaaS exploring AI features. Strong fit for a 4-week MVP scope.</span>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <Rule weight="ink" />
+
+  <!-- PROCESS -->
+  <Section label="How we work">
+    <div class="process">
+      {process.map((p) => (
+        <article class="process__step">
+          <span class="process__num">{p.num}</span>
+          <h3 class="process__name">{p.name}.</h3>
+          <p class="process__line">{p.line}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Rule weight="ink" />
+
+  <!-- RECENT / NOTES -->
+  <Section label="Recent &amp; notes">
+    <div class="notes">
+      {notes.map((n) => (
+        <article class="note">
+          <p class="note__meta">
+            <span class="note__label">{n.label}</span>
+            <span class="note__date">{n.date}</span>
+          </p>
+          <h3 class="note__title">{n.title}</h3>
+          <p class="note__sub">{n.subtitle}</p>
+        </article>
+      ))}
+    </div>
+    <p class="notes__foot">
+      More as we ship. Follow along — or <a href="/contact" class="notes__inline-link">tell us what you're building</a>.
+    </p>
+  </Section>
+
+  <Rule weight="ink" />
+
+  <!-- CONTACT STRIP -->
+  <Section tone="alt">
+    <div class="contact-strip">
+      <h2 class="contact-strip__head">Tell us what you're building.</h2>
+      <div class="contact-strip__row">
+        <a href="mailto:hello@theagentsees.com" class="contact-strip__email">hello@theagentsees.com</a>
+        <Button href="/contact">Start a project</Button>
+      </div>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  /* HERO */
+  .hero {
+    padding-inline: var(--spacing-gutter-sm);
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+  @media (min-width: 48rem) {
+    .hero { padding-inline: var(--spacing-gutter-md); padding-block: 3.5rem; }
+  }
+  @media (min-width: 64rem) {
+    .hero { padding-inline: var(--spacing-gutter-lg); padding-block: 5rem; }
+  }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+    max-width: 88rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 64rem) {
+    .hero__inner { grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr); column-gap: 4rem; align-items: end; }
+  }
+  .hero__eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+    margin-bottom: 1.5rem;
+  }
+  .hero__head {
+    font-size: var(--text-3xl);
+    line-height: 0.98;
+    margin-bottom: 1.5rem;
+  }
+  @media (min-width: 48rem) { .hero__head { font-size: var(--text-4xl); } }
+  @media (min-width: 64rem) { .hero__head { font-size: var(--text-5xl); } }
+  .hero__sub {
+    font-size: var(--text-base);
+    color: var(--color-mute);
+    max-width: 34rem;
+    line-height: 1.55;
+    margin-bottom: 2rem;
+  }
+  .hero__cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .hero__status {
+    border-left: 1px solid var(--color-ink);
+    padding-left: 1.25rem;
+    align-self: end;
+  }
+  .hero__status-label {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+    margin-bottom: 0.75rem;
+  }
+  .hero__status ul {
+    list-style: none;
+    margin: 0 0 0.75rem 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+  .hero__status li::before {
+    content: "→ ";
+    color: var(--color-mute);
+  }
+  .hero__status-foot {
+    font-size: var(--text-xs);
+    color: var(--color-mute);
+  }
+
+  /* SERVICES */
+  .services {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    max-width: 88rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 48rem) {
+    .services { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 3rem; }
+  }
+  .service {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-ink);
+  }
+  .service__num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-mute);
+  }
+  .service__name {
+    font-size: var(--text-2xl);
+    line-height: 1.02;
+  }
+  .service__line {
+    font-size: var(--text-base);
+    color: var(--color-mute);
+    line-height: 1.55;
+    max-width: 22rem;
+  }
+
+  /* DEMO TEASER */
+  .demo-teaser {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    max-width: 88rem;
+    margin-inline: auto;
+    align-items: center;
+  }
+  @media (min-width: 64rem) {
+    .demo-teaser { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 4rem; }
+  }
+  .demo-teaser__copy h2 {
+    font-size: var(--text-2xl);
+    line-height: 1.02;
+    margin-bottom: 1rem;
+    max-width: 22rem;
+  }
+  @media (min-width: 64rem) { .demo-teaser__copy h2 { font-size: var(--text-3xl); } }
+  .demo-teaser__copy p {
+    font-size: var(--text-base);
+    color: var(--color-mute);
+    line-height: 1.6;
+    max-width: 32rem;
+    margin-bottom: 1.5rem;
+  }
+  .demo-teaser__preview {
+    background: var(--color-paper);
+    border: 1px solid var(--color-ink);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-family: var(--font-mono);
+  }
+  .demo-teaser__field {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: var(--text-sm);
+    border-bottom: 1px solid var(--color-hairline);
+    padding-bottom: 0.75rem;
+  }
+  .demo-teaser__field--multi {
+    flex-direction: column;
+    gap: 0.4rem;
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .demo-teaser__field-label {
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+  }
+  .demo-teaser__field-val { font-weight: 500; }
+  .demo-teaser__field-val--soft {
+    font-weight: 400;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: 1.55;
+  }
+
+  /* PROCESS */
+  .process {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    max-width: 88rem;
+    margin-inline: auto;
+    counter-reset: process;
+  }
+  @media (min-width: 48rem) {
+    .process { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; }
+  }
+  @media (min-width: 64rem) {
+    .process { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 2.5rem; }
+  }
+  .process__step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--color-ink);
+  }
+  .process__num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-mute);
+  }
+  .process__name {
+    font-size: var(--text-lg);
+    line-height: 1.05;
+  }
+  .process__line {
+    font-size: var(--text-sm);
+    color: var(--color-mute);
+    line-height: 1.5;
+  }
+
+  /* NOTES */
+  .notes {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    max-width: 88rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 48rem) {
+    .notes { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 3rem; }
+  }
+  .note {
+    border-top: 1px solid var(--color-ink);
+    padding-top: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .note__meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+  }
+  .note__label { color: var(--color-ink); }
+  .note__title {
+    font-size: var(--text-xl);
+    line-height: 1.05;
+  }
+  .note__sub {
+    font-size: var(--text-sm);
+    color: var(--color-mute);
+    line-height: 1.55;
+  }
+  .notes__foot {
+    margin-top: 2.5rem;
+    font-size: var(--text-sm);
+    color: var(--color-mute);
+    max-width: 38rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  .notes__inline-link {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: var(--color-ink);
+  }
+
+  /* CONTACT STRIP */
+  .contact-strip {
+    max-width: 88rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  @media (min-width: 64rem) {
+    .contact-strip { flex-direction: row; align-items: center; justify-content: space-between; gap: 3rem; }
+  }
+  .contact-strip__head {
+    font-size: var(--text-2xl);
+    line-height: 1.02;
+    max-width: 26rem;
+  }
+  @media (min-width: 64rem) { .contact-strip__head { font-size: var(--text-3xl); } }
+  .contact-strip__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .contact-strip__email {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+</style>
