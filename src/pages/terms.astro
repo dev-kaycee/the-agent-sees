@@ -6,36 +6,159 @@ import Section from "../components/ui/Section.astro";
 import Rule from "../components/ui/Rule.astro";
 
 const updated = "2026-05-17";
+
+const toc = [
+  { id: "use", label: "Use of this site" },
+  { id: "demo", label: "The live demo" },
+  { id: "engagement", label: "Engagement terms" },
+  { id: "ip", label: "Intellectual property" },
+  { id: "liability", label: "Liability" },
+  { id: "contact", label: "Contact" },
+];
 ---
 <Base title="Terms — The Agent Sees" metaMiddle="LEGAL · TERMS" metaRight={`UPDATED ${updated}`}>
   <Section label="Terms of Use" density="compact">
-    <div style="max-width: 64rem; display: grid; grid-template-columns: 1fr; gap: 3rem;" class="md:grid-cols-[1fr_2fr] md:gap-12">
-      <header>
-        <h1 style="font-size: var(--text-2xl); line-height: 1.05; margin-bottom: 1.25rem;">The rules of the road.</h1>
-        <p style="font-size: var(--text-sm); color: var(--color-mute);">Govern your use of this site. Last updated {updated}.</p>
+    <div class="legal">
+      <header class="legal__header">
+        <h1>The rules of the road.</h1>
+        <p class="legal__sub">Govern your use of this site. Last updated {updated}.</p>
+        <nav class="legal__toc" aria-label="Sections">
+          <p class="legal__toc-label">Sections</p>
+          <ol>
+            {toc.map((item, i) => (
+              <li>
+                <a href={`#${item.id}`}>
+                  <span class="legal__toc-num">{String(i + 1).padStart(2, "0")}</span>
+                  <span>{item.label}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
       </header>
 
-      <article style="display: flex; flex-direction: column; gap: 1.25rem; font-size: var(--text-base); line-height: 1.65; max-width: 38rem;">
-        <Rule weight="hairline" />
+      <article class="legal__article">
+        <Rule weight="ink" />
 
-        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Use of this site</h2>
-        <p>You may use this site to learn about our studio and contact us. You may not scrape, abuse, reverse-engineer, or attempt to interfere with the demo agent or contact form. Rate limits exist and are enforced.</p>
+        <section id="use">
+          <h2>Use of this site</h2>
+          <p>You may use this site to learn about our studio and contact us. You may not scrape, abuse, reverse-engineer, or attempt to interfere with the demo agent or contact form. Rate limits exist and are enforced.</p>
+        </section>
 
-        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">The live demo</h2>
-        <p>The Lead Qualifier demo on /work is provided for illustration. Outputs are produced by a free-tier language model and are not professional advice. Don't paste confidential information into the demo — we don't store it, but the inference provider has its own policies.</p>
+        <section id="demo">
+          <h2>The live demo</h2>
+          <p>The Lead Qualifier demo on /work is provided for illustration. Outputs are produced by a free-tier language model and are not professional advice. Don't paste confidential information into the demo — we don't store it, but the inference provider has its own policies.</p>
+        </section>
 
-        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Engagement terms</h2>
-        <p>This site does not constitute a contract. Any engagement with The Agent Sees is governed by a separate Statement of Work signed between you and us.</p>
+        <section id="engagement">
+          <h2>Engagement terms</h2>
+          <p>This site does not constitute a contract. Any engagement with The Agent Sees is governed by a separate Statement of Work signed between you and us.</p>
+        </section>
 
-        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Intellectual property</h2>
-        <p>The brand, copy, design system, and code on this site are owned by The Agent Sees. The legacy archived HTML retains its prior ownership.</p>
+        <section id="ip">
+          <h2>Intellectual property</h2>
+          <p>The brand, copy, design system, and code on this site are owned by The Agent Sees. The legacy archived HTML retains its prior ownership.</p>
+        </section>
 
-        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Liability</h2>
-        <p>This site is provided "as is" without warranty. We're not liable for any loss arising from your use of the site or the demo.</p>
+        <section id="liability">
+          <h2>Liability</h2>
+          <p>This site is provided "as is" without warranty. We're not liable for any loss arising from your use of the site or the demo.</p>
+        </section>
 
-        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Contact</h2>
-        <p>Questions about these terms: <a href="mailto:hello@theagentsees.com" style="text-decoration: underline;">hello@theagentsees.com</a>.</p>
+        <section id="contact">
+          <h2>Contact</h2>
+          <p>Questions about these terms: <a href="mailto:hello@theagentsees.com">hello@theagentsees.com</a>.</p>
+        </section>
       </article>
     </div>
   </Section>
 </Base>
+
+<style>
+  .legal {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    max-width: 78rem;
+    margin-inline: auto;
+  }
+  .legal__header h1 {
+    font-size: var(--text-2xl);
+    line-height: 1.02;
+    margin-bottom: 1rem;
+  }
+  .legal__sub {
+    font-size: var(--text-sm);
+    color: var(--color-mute);
+    margin-bottom: 2rem;
+  }
+  .legal__toc-label {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+    margin-bottom: 0.75rem;
+  }
+  .legal__toc ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-top: 1px solid var(--color-hairline);
+    padding-top: 0.75rem;
+  }
+  .legal__toc a {
+    display: flex;
+    gap: 0.75rem;
+    font-size: var(--text-sm);
+    padding: 0.25rem 0;
+  }
+  .legal__toc a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .legal__toc-num {
+    font-family: var(--font-mono);
+    color: var(--color-mute);
+    font-size: var(--text-xs);
+    min-width: 1.5rem;
+  }
+
+  .legal__article {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-size: var(--text-base);
+    line-height: 1.7;
+    max-width: 42rem;
+  }
+  .legal__article section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .legal__article h2 {
+    font-size: var(--text-lg);
+    margin-top: 1rem;
+    scroll-margin-top: 6rem;
+  }
+  .legal__article a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  @media (min-width: 64rem) {
+    .legal {
+      grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+      column-gap: 5rem;
+      align-items: start;
+    }
+    .legal__header {
+      position: sticky;
+      top: 2rem;
+    }
+  }
+</style>
