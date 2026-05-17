@@ -20,9 +20,9 @@ export const AgentOutput = z.object({
     "out_of_scope",
   ]),
   priority: z.union([z.literal(1), z.literal(3), z.literal(5)]),
-  reasoning: z.string().min(1).max(200),
-  suggested_action: z.string().min(1).max(200),
-  draft_reply: z.string().min(1).max(500),
+  reasoning: z.string().min(1).max(400),
+  suggested_action: z.string().min(1).max(400),
+  draft_reply: z.string().min(1).max(800),
 });
 export type AgentOutput = z.infer<typeof AgentOutput>;
 

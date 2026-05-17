@@ -5,7 +5,10 @@ import { checkLimit, ipKey, dailyCapKey } from "../../../lib/rate-limit.js";
 import { runWithRetry, type AiBinding } from "../../../lib/ai.js";
 import type { Limiter } from "../../../lib/rate-limit.js";
 
-const MODEL = "@cf/meta/llama-3.1-8b-instruct";
+// Llama 3.3 70B fp8-fast: noticeably better instruction-following than 8B, still
+// on Workers AI free tier. We need the bigger model so it stops parroting the
+// few-shot patterns we used to give it on 8B.
+const MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast";
 const PER_IP_LIMIT = 5;          // requests
 const PER_IP_WINDOW_S = 60;      // per minute
 const DAILY_CAP = 1000;          // total per UTC day
@@ -107,11 +110,15 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   try {
     const result = await runWithRetry(env.AI, MODEL, parsed.lead);
     return jsonOk(result);
-  } catch {
+  } catch (e) {
+    // Full detail (zod errors, raw model output) is logged inside runWithRetry
+    // via console.warn — visible in `wrangler tail`. The user gets a friendly,
+    // generic message.
+    console.warn("lead-qualifier model_error", e instanceof Error ? e.message : String(e));
     return jsonError(
       502,
       "model_error",
-      "The model couldn't return a valid response. Please try a different phrasing.",
+      "The model couldn't return a valid response. Try a slightly different phrasing — sometimes single-word inputs throw it off.",
     );
   }
 };

@@ -67,7 +67,10 @@ export async function checkLimit(
   }
 
   count += 1;
-  const remainingSeconds = Math.max(1, windowSeconds - Math.floor((now - windowStart) / 1000));
+  // Cloudflare KV requires expirationTtl >= 60. Clamp to that floor so per-IP
+  // refreshes mid-window don't reject. The stored `windowStart` is the source
+  // of truth for "are we still in the window?" — the TTL is just GC.
+  const remainingSeconds = Math.max(60, windowSeconds - Math.floor((now - windowStart) / 1000));
 
   await kv.put(key, JSON.stringify({ count, windowStart }), {
     expirationTtl: remainingSeconds,

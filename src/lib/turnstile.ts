@@ -18,7 +18,7 @@ export async function verifyTurnstile(
   secret: string,
   remoteIp?: string,
 ): Promise<TurnstileResult> {
-  const body = new FormData();
+  const body = new URLSearchParams();
   body.set("secret", secret);
   body.set("response", token);
   if (remoteIp) body.set("remoteip", remoteIp);
@@ -27,6 +27,7 @@ export async function verifyTurnstile(
   try {
     res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
       method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body,
     });
   } catch {

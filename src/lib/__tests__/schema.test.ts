@@ -52,8 +52,8 @@ describe("AgentOutput", () => {
     expect(() => AgentOutput.parse({ ...valid, classification: "bogus" })).toThrow();
   });
 
-  it("rejects reasoning longer than 200 chars", () => {
-    expect(() => AgentOutput.parse({ ...valid, reasoning: "x".repeat(201) })).toThrow();
+  it("rejects reasoning longer than 400 chars", () => {
+    expect(() => AgentOutput.parse({ ...valid, reasoning: "x".repeat(401) })).toThrow();
   });
 
   it("rejects missing fields", () => {
