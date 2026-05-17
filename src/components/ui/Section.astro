@@ -1,0 +1,18 @@
+---
+interface Props {
+  label?: string;
+  id?: string;
+  /** "default" (white) | "alt" (paper-2) */
+  tone?: "default" | "alt";
+}
+const { label, id, tone = "default" } = Astro.props;
+const bg = tone === "alt" ? "var(--color-paper-2)" : "var(--color-paper)";
+---
+<section
+  id={id}
+  class="px-[var(--spacing-gutter-sm)] md:px-[var(--spacing-gutter-md)] lg:px-[var(--spacing-gutter-lg)] py-[3rem] md:py-[5rem] lg:py-[7rem]"
+  style={`background: ${bg};`}
+>
+  {label && <p class="label mb-6">{label}</p>}
+  <slot />
+</section>

@@ -1,0 +1,9 @@
+---
+interface Props {
+  /** "ink" (full black) | "hairline" (10% black) — defaults to "ink" */
+  weight?: "ink" | "hairline";
+}
+const { weight = "ink" } = Astro.props;
+const color = weight === "ink" ? "var(--color-ink)" : "var(--color-hairline)";
+---
+<hr style={`border: 0; border-top: 1px solid ${color}; margin: 0;`} />

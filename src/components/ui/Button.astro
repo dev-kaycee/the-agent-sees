@@ -1,0 +1,23 @@
+---
+import Arrow from "../icons/Arrow.astro";
+
+interface Props {
+  href: string;
+  /** "primary" (black-on-white) | "ghost" (white-on-black border) — defaults to primary */
+  variant?: "primary" | "ghost";
+  /** external link opens in new tab */
+  external?: boolean;
+  showArrow?: boolean;
+}
+const { href, variant = "primary", external = false, showArrow = true } = Astro.props;
+const target = external ? "_blank" : undefined;
+const rel = external ? "noopener noreferrer" : undefined;
+const baseClass = "inline-flex items-center gap-2 text-sm font-medium px-5 py-3 transition-colors";
+const variantClass = variant === "primary"
+  ? "bg-[var(--color-ink)] text-[var(--color-paper)] hover:bg-[var(--color-mute)]"
+  : "bg-transparent text-[var(--color-ink)] border border-[var(--color-ink)] hover:bg-[var(--color-ink)] hover:text-[var(--color-paper)]";
+---
+<a href={href} target={target} rel={rel} class={`${baseClass} ${variantClass}`}>
+  <slot />
+  {showArrow && <Arrow size={14} />}
+</a>
