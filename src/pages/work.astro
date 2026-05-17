@@ -4,14 +4,14 @@ export const prerender = true;
 import Base from "../components/layout/Base.astro";
 import Section from "../components/ui/Section.astro";
 import Rule from "../components/ui/Rule.astro";
-import LeadQualifier from "../components/islands/LeadQualifier.tsx";
+import LeadPipeline from "../components/islands/LeadPipeline.tsx";
 
 const builds = [
   {
-    label: "In build",
-    title: "Lead Qualifier (live demo)",
-    sub: "An agent that classifies inbound leads, scores priority, suggests next action, drafts a reply. Live on this page once Plan 4 ships.",
-    meta: "AI · Workers AI · Streaming",
+    label: "Live",
+    title: "Lead Pipeline (this page)",
+    sub: "Four agents — Triage → Discovery → Scope → Pitch — running end-to-end on Cloudflare Workers AI. Paste a lead, watch them work.",
+    meta: "AI · Workers AI · SSE",
   },
   {
     label: "In build",
@@ -22,8 +22,8 @@ const builds = [
 ];
 
 const nextUp = [
-  "Contact form on D1 + Resend",
-  "Lead Qualifier on Workers AI with streaming",
+  "Contact form on D1 + Resend (Plan 3)",
+  "Per-stage streaming inside each agent",
   "First real client engagement — write-up to follow",
 ];
 
@@ -38,29 +38,35 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
   <section class="work-hero">
     <div class="work-hero__inner">
       <p class="label">Work / Demos</p>
-      <h1 class="work-hero__head">Try the agent.<br />Read the build notes.</h1>
+      <h1 class="work-hero__head">A four-agent pipeline you can run on yourself.</h1>
       <p class="work-hero__sub">
-        We'll keep adding as we ship. The Lead Qualifier demo is the centrepiece — interactive, public, running on a free-tier model so you can poke at it without us looking over your shoulder.
+        Paste an inbound lead. Watch four agents triage it, draft discovery questions, propose a week-by-week scope, and write the reply we'd actually send. Running on a free model. No accounts, no signup.
       </p>
     </div>
   </section>
 
   <Rule weight="ink" />
 
-  <!-- DEMO PLACEHOLDER -->
-  <Section label="Live demo · Lead Qualifier" id="demo">
+  <!-- DEMO -->
+  <Section label="Live demo · Lead Pipeline" id="demo">
     <div class="demo-shell">
       <div class="demo-shell__copy">
-        <h2 class="demo-shell__head">Try the agent.</h2>
+        <h2 class="demo-shell__head">Four agents.<br />One pipeline.</h2>
         <p class="demo-shell__body">
-          Paste a hypothetical lead — a sentence is fine. The agent classifies it, scores priority, suggests a next action, and drafts a 2-sentence reply.
+          <strong>Triage</strong> classifies the lead and pulls out entities.
+          <strong>Discovery</strong> drafts the questions we'd ask on a call.
+          <strong>Scope</strong> proposes a week-by-week plan with a tech stack and effort estimate.
+          <strong>Pitch</strong> writes the founder-voice reply with a concrete next step.
         </p>
         <p class="demo-shell__body">
-          Running on Cloudflare Workers AI (Llama 3.1 8B). Rate-limited to 5 requests/minute per IP and 1000/day total. Free for you to use.
+          Each step is its own model call, streamed back as it completes. Llama 3.3 70B via Cloudflare Workers AI. Rate-limited (5/min/IP, 1000/day total). Free for you to use.
+        </p>
+        <p class="demo-shell__body demo-shell__body--mute">
+          This is roughly what we'd build inside your inbound flow — except wired to your CRM, your data, and your team's tone.
         </p>
       </div>
       <div class="demo-shell__island">
-        <LeadQualifier client:visible turnstileSiteKey={turnstileSiteKey} />
+        <LeadPipeline client:visible turnstileSiteKey={turnstileSiteKey} />
       </div>
     </div>
   </Section>
@@ -98,7 +104,7 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
         ))}
       </ol>
       <p class="next__foot">
-        Want to be on the list? <a href="/contact" class="next__link">Tell us what you're building.</a>
+        Want a pipeline built around your data? <a href="/contact" class="next__link">Tell us what you're building.</a>
       </p>
     </div>
   </Section>
@@ -116,6 +122,7 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     font-size: var(--text-3xl);
     line-height: 1.0;
     margin: 1rem 0 1.5rem;
+    max-width: 28ch;
   }
   @media (min-width: 48rem) { .work-hero__head { font-size: var(--text-4xl); } }
   @media (min-width: 64rem) { .work-hero__head { font-size: var(--text-5xl); } }
@@ -131,12 +138,12 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 2.5rem;
-    max-width: 88rem;
+    max-width: 92rem;
     margin-inline: auto;
     align-items: start;
   }
   @media (min-width: 64rem) {
-    .demo-shell { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); column-gap: 4rem; }
+    .demo-shell { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); column-gap: 4rem; }
   }
   .demo-shell__head {
     font-size: var(--text-2xl);
@@ -147,11 +154,14 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
   @media (min-width: 64rem) { .demo-shell__head { font-size: var(--text-3xl); } }
   .demo-shell__body {
     font-size: var(--text-base);
-    color: var(--color-mute);
-    line-height: 1.65;
+    color: var(--color-ink);
+    line-height: 1.7;
     margin-bottom: 1.25rem;
     max-width: 36rem;
   }
+  .demo-shell__body--mute { color: var(--color-mute); font-size: var(--text-sm); }
+  .demo-shell__body strong { font-weight: 700; }
+
   /* BUILDS */
   .builds {
     display: grid;
@@ -195,10 +205,7 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
 
   /* NEXT */
   .next { max-width: 72rem; margin-inline: auto; }
-  .next__head {
-    font-size: var(--text-2xl);
-    margin-bottom: 1.5rem;
-  }
+  .next__head { font-size: var(--text-2xl); margin-bottom: 1.5rem; }
   .next__list {
     list-style: none;
     margin: 0 0 2rem 0;
@@ -222,42 +229,62 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     color: var(--color-mute);
     min-width: 2rem;
   }
-  .next__foot {
-    font-size: var(--text-sm);
-    color: var(--color-mute);
-  }
+  .next__foot { font-size: var(--text-sm); color: var(--color-mute); }
   .next__link {
     text-decoration: underline;
     text-underline-offset: 3px;
     color: var(--color-ink);
   }
 
-  /* DEMO ISLAND host */
+  /* PIPELINE ISLAND host */
   .demo-shell__island {
-    background: var(--color-paper);
     border: 1px solid var(--color-ink);
+    background: var(--color-paper);
     padding: 1.5rem;
   }
 
-  /* LeadQualifier internal styles — scoped via :global() */
-  :global(.lq) {
+  /* LeadPipeline internal styles — scoped via :global() */
+  :global(.pl) {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     font-family: var(--font-sans);
   }
-  :global(.lq__form) {
+
+  /* form */
+  :global(.pl__form) {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
   }
-  :global(.lq__label) {
+  :global(.pl__label-row) {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+  :global(.pl__label) {
     font-size: var(--text-xs);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
     color: var(--color-mute);
   }
-  :global(.lq__textarea) {
+  :global(.pl__example-btn) {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-ink);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  :global(.pl__example-btn:disabled) {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  :global(.pl__textarea) {
     font-family: var(--font-sans);
     font-size: var(--text-base);
     line-height: 1.5;
@@ -268,11 +295,11 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     resize: vertical;
     min-height: 6rem;
   }
-  :global(.lq__textarea:focus-visible) {
+  :global(.pl__textarea:focus-visible) {
     outline: 2px solid var(--color-ink);
     outline-offset: 2px;
   }
-  :global(.lq__row) {
+  :global(.pl__row) {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -280,89 +307,278 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     font-family: var(--font-mono);
     font-size: var(--text-xs);
   }
-  :global(.lq__count) {
-    color: var(--color-mute);
-  }
-  :global(.lq__actions) {
-    display: flex;
-    gap: 0.5rem;
-  }
-  :global(.lq__btn) {
+  :global(.pl__count) { color: var(--color-mute); }
+  :global(.pl__actions) { display: flex; gap: 0.5rem; }
+  :global(.pl__btn) {
     background: var(--color-ink);
     color: var(--color-paper);
-    padding: 0.5rem 1rem;
+    padding: 0.55rem 1.1rem;
     font-size: var(--text-sm);
     font-weight: 500;
     border: 0;
     cursor: pointer;
     font-family: var(--font-sans);
   }
-  :global(.lq__btn:hover:not(:disabled)) {
-    background: var(--color-mute);
-  }
-  :global(.lq__btn:disabled) {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-  :global(.lq__btn--ghost) {
+  :global(.pl__btn:hover:not(:disabled)) { background: var(--color-mute); }
+  :global(.pl__btn:disabled) { opacity: 0.5; cursor: not-allowed; }
+  :global(.pl__btn--ghost) {
     background: transparent;
     color: var(--color-ink);
     border: 1px solid var(--color-ink);
   }
-  :global(.lq__btn--ghost:hover) {
+  :global(.pl__btn--ghost:hover) {
     background: var(--color-ink);
     color: var(--color-paper);
   }
-  :global(.lq__turnstile) {
-    min-height: 0;
-  }
-  :global(.lq__output) {
-    border-top: 1px solid var(--color-hairline);
-    padding-top: 1rem;
-    min-height: 6rem;
-  }
-  :global(.lq__hint),
-  :global(.lq__error) {
+  :global(.pl__turnstile) { min-height: 0; }
+  :global(.pl__error) {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
-    color: var(--color-mute);
-  }
-  :global(.lq__error) {
     color: var(--color-ink);
+    border-top: 1px solid var(--color-hairline);
+    padding-top: 1rem;
   }
-  :global(.lq__fields) {
+  :global(.pl__disclaimer) {
+    font-size: var(--text-xs);
+    color: var(--color-mute);
+    line-height: 1.5;
+    max-width: 42rem;
+    margin: 0;
+  }
+
+  /* steps list */
+  :global(.pl__steps) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-top: 1px solid var(--color-hairline);
+    padding-top: 1rem;
+  }
+  :global(.pl-step) {
+    border: 1px solid var(--color-hairline);
+    background: var(--color-paper);
+    padding: 0.85rem 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    margin: 0;
+    animation: pl-fade-in 280ms ease-out;
   }
-  :global(.lq__field) {
+  :global(.pl-step--active) {
+    border-color: var(--color-ink);
+    box-shadow: inset 3px 0 0 var(--color-ink);
+  }
+  :global(.pl-step--done) {
+    border-color: var(--color-ink);
+  }
+  :global(.pl-step__head) {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+  :global(.pl-step__num) {
+    color: var(--color-mute);
+    min-width: 1.5rem;
+  }
+  :global(.pl-step__title) { color: var(--color-ink); flex: 1; }
+  :global(.pl-step__status) {
+    display: inline-flex;
+    align-items: center;
+    color: var(--color-ink);
+  }
+  :global(.pl-step__pending) {
+    color: var(--color-mute);
+    font-size: var(--text-xs);
+  }
+  :global(.pl-step__body) {
+    border-top: 1px dashed var(--color-hairline);
+    padding-top: 0.85rem;
+  }
+
+  /* stage body shared */
+  :global(.pl-stage) {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid var(--color-hairline);
+    gap: 0.75rem;
+    font-size: var(--text-sm);
   }
-  :global(.lq__field:last-child) {
-    border-bottom: 0;
+  :global(.pl-stage__row) {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
   }
-  :global(.lq__field dt) {
+  :global(.pl-stage__row--col) {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+  :global(.pl-stage__k) {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
     color: var(--color-mute);
-    margin: 0;
   }
-  :global(.lq__field dd) {
+  :global(.pl-stage__v) {
+    color: var(--color-ink);
+    line-height: 1.55;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  :global(.pl-stage__v--mono) { font-family: var(--font-mono); }
+  :global(.pl-pills) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  :global(.pl-pill) {
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-hairline);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    padding: 0.2rem 0.55rem;
+  }
+  :global(.pl-bullets) {
+    list-style: none;
     margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  :global(.pl-bullets li) {
+    padding-left: 1rem;
+    position: relative;
+    line-height: 1.5;
+  }
+  :global(.pl-bullets li::before) {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--color-mute);
+  }
+
+  /* fit bar */
+  :global(.pl-fit) {
+    display: inline-flex;
+    gap: 2px;
+  }
+  :global(.pl-fit__seg) {
+    width: 14px;
+    height: 8px;
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-hairline);
+  }
+  :global(.pl-fit__seg--on) {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+  :global(.pl-fit__val) { font-family: var(--font-mono); font-size: var(--text-xs); }
+
+  /* discovery questions */
+  :global(.pl-questions) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  :global(.pl-questions li) {
+    display: grid;
+    grid-template-columns: 2rem 1fr;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+  :global(.pl-questions__num) {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-mute);
+  }
+  :global(.pl-questions__body) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  :global(.pl-questions__topic) {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+  }
+  :global(.pl-questions__q) {
+    font-size: var(--text-base);
+    line-height: 1.5;
+    color: var(--color-ink);
+  }
+
+  /* scope weeks */
+  :global(.pl-weeks) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-ink);
+  }
+  :global(.pl-weeks li) {
+    border-bottom: 1px solid var(--color-hairline);
+    padding: 0.65rem 0;
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  :global(.pl-weeks__label) {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+  :global(.pl-weeks__deliv) {
     font-size: var(--text-sm);
     line-height: 1.55;
+    color: var(--color-ink);
   }
-  :global(.lq__disclaimer) {
-    font-size: var(--text-xs);
-    color: var(--color-mute);
-    line-height: 1.5;
-    max-width: 38rem;
+
+  /* pitch reply */
+  :global(.pl-reply) {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    background: var(--color-paper-2);
+    border-left: 3px solid var(--color-ink);
+    font-size: var(--text-base);
+    line-height: 1.65;
+    font-style: normal;
+  }
+
+  /* spinner */
+  :global(.pl-spinner) {
+    animation: pl-spin 800ms linear infinite;
+    transform-origin: center;
+  }
+
+  @keyframes pl-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes pl-fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    :global(.pl-step) { animation: none; }
+    :global(.pl-spinner) { animation: none; }
   }
 </style>
