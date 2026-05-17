@@ -1,24 +1,39 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "the-agent-sees",
-  "main": "./dist/_worker.js/index.js",
-  "compatibility_date": "2026-05-01",
-  "compatibility_flags": ["nodejs_compat"],
-  "assets": {
-    "binding": "ASSETS",
-    "directory": "./dist"
-  },
-  "observability": {
-    "enabled": true
-  },
-  "routes": [
-    {
-      "pattern": "theagentsees.com/*",
-      "zone_name": "theagentsees.com"
-    },
-    {
-      "pattern": "dev.theagentsees.com/*",
-      "zone_name": "theagentsees.com"
-    }
-  ]
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "the-agent-sees",
+	"main": "./dist/_worker.js/index.js",
+	"compatibility_date": "2026-05-01",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./dist"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"routes": [
+		{
+			"pattern": "theagentsees.com/*",
+			"zone_name": "theagentsees.com"
+		},
+		{
+			"pattern": "dev.theagentsees.com/*",
+			"zone_name": "theagentsees.com"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "RATE_LIMIT",
+			"id": "c8700b15c5e540b4b30264799669239d",
+			"remote": true
+		}
+	],
+	"ai": {
+		"binding": "AI"
+	},
+	"vars": {
+		"PUBLIC_TURNSTILE_SITE_KEY": "0x4AAAAAADRM5l2r0QMiXnmH"
+	}
 }
