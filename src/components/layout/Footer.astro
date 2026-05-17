@@ -2,18 +2,17 @@
 import Rule from "../ui/Rule.astro";
 const year = new Date().getFullYear();
 ---
-<footer
-  class="px-[var(--spacing-gutter-sm)] md:px-[var(--spacing-gutter-md)] lg:px-[var(--spacing-gutter-lg)]"
-  style="padding-top: 3rem; padding-bottom: 3rem;"
->
+<footer class="footer">
   <Rule weight="hairline" />
-  <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem;" class="md:grid-cols-3">
-    <div>
-      <p style="font-family: var(--font-display); font-size: var(--text-lg); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem;">THE AGENT SEES</p>
-      <p style="font-size: var(--text-sm); color: var(--color-mute); max-width: 22rem;">AI-powered MVPs, web apps, and the agents that run inside them. New studio. Built on conviction.</p>
+  <div class="footer__grid">
+    <div class="footer__brand">
+      <p class="footer__wordmark">THE AGENT SEES</p>
+      <p class="footer__blurb">AI-powered MVPs, web apps, and the agents that run inside them. New studio. Built on conviction.</p>
     </div>
-    <nav aria-label="Footer">
-      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; font-size: var(--text-sm);">
+
+    <nav class="footer__nav" aria-label="Footer">
+      <p class="footer__label">Site</p>
+      <ul>
         <li><a href="/work">Work</a></li>
         <li><a href="/studio">Studio</a></li>
         <li><a href="/contact">Contact</a></li>
@@ -21,10 +20,109 @@ const year = new Date().getFullYear();
         <li><a href="/terms">Terms</a></li>
       </ul>
     </nav>
-    <div style="font-size: var(--text-sm); color: var(--color-mute);">
-      <p>Remote · Worldwide</p>
+
+    <div class="footer__contact">
+      <p class="footer__label">Contact</p>
       <p><a href="mailto:hello@theagentsees.com">hello@theagentsees.com</a></p>
-      <p style="margin-top: 1rem;">© {year} The Agent Sees</p>
+      <p class="footer__mute">Remote · Worldwide</p>
     </div>
   </div>
+
+  <div class="footer__bottom">
+    <span>© {year} The Agent Sees</span>
+    <span class="footer__mute">All rights reserved.</span>
+  </div>
 </footer>
+
+<style>
+  .footer {
+    padding-inline: var(--spacing-gutter-sm);
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+  @media (min-width: 48rem) {
+    .footer {
+      padding-inline: var(--spacing-gutter-md);
+    }
+  }
+  @media (min-width: 64rem) {
+    .footer {
+      padding-inline: var(--spacing-gutter-lg);
+    }
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    margin-top: 2.5rem;
+  }
+  @media (min-width: 48rem) {
+    .footer__grid {
+      grid-template-columns: 2fr 1fr 1fr;
+      column-gap: 3rem;
+      align-items: start;
+    }
+  }
+
+  .footer__wordmark {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .footer__blurb {
+    font-size: var(--text-sm);
+    color: var(--color-mute);
+    max-width: 26rem;
+    line-height: 1.6;
+  }
+
+  .footer__label {
+    font-family: var(--font-sans);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+    margin-bottom: 0.75rem;
+  }
+
+  .footer__nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: var(--text-sm);
+  }
+  .footer__nav a:hover,
+  .footer__contact a:hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .footer__contact {
+    font-size: var(--text-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .footer__mute {
+    color: var(--color-mute);
+  }
+
+  .footer__bottom {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-hairline);
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-ink);
+  }
+</style>
