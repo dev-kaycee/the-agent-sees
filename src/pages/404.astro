@@ -1,0 +1,50 @@
+---
+export const prerender = true;
+
+import Base from "../components/layout/Base.astro";
+import Section from "../components/ui/Section.astro";
+import Button from "../components/ui/Button.astro";
+---
+<Base title="404 — The Agent Sees" metaMiddle="404 · NOT FOUND" metaRight="ROUTE NOT FOUND">
+  <Section>
+    <div class="four-oh-four">
+      <p class="label">404</p>
+      <h1>This page doesn't exist.</h1>
+      <p class="four-oh-four__sub">
+        It might have moved with the rebuild. Or it was never here. Either way, the links below are the real ones.
+      </p>
+      <div class="four-oh-four__links">
+        <Button href="/">Home</Button>
+        <Button href="/work" variant="ghost">Work</Button>
+        <Button href="/studio" variant="ghost">Studio</Button>
+        <Button href="/contact" variant="ghost">Contact</Button>
+      </div>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .four-oh-four {
+    max-width: 56rem;
+    margin-inline: auto;
+    text-align: left;
+  }
+  .four-oh-four h1 {
+    font-size: var(--text-3xl);
+    line-height: 1.0;
+    margin: 1rem 0 1.5rem;
+  }
+  @media (min-width: 48rem) { .four-oh-four h1 { font-size: var(--text-4xl); } }
+  .four-oh-four__sub {
+    font-size: var(--text-base);
+    color: var(--color-mute);
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+    max-width: 34rem;
+  }
+  .four-oh-four__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+</style>
