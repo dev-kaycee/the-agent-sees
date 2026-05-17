@@ -27,7 +27,11 @@ const nextUp = [
   "First real client engagement — write-up to follow",
 ];
 
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "1x00000000000000000000AA";
+// Public site key for Cloudflare Turnstile. Safe to commit — it ships in HTML to every
+// visitor anyway. The matching secret lives as a Worker secret (TURNSTILE_SECRET_KEY).
+// We don't read this from import.meta.env because Astro reads that at build time from
+// .env files, NOT from wrangler.jsonc#vars (which is a Cloudflare runtime mechanism).
+const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
 ---
 <Base title="Work — The Agent Sees" metaMiddle="WORK · DEMOS" metaRight="2026 →">
   <!-- HEADER -->
