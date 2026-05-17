@@ -1,0 +1,30 @@
+---
+import Rule from "../ui/Rule.astro";
+const year = new Date().getFullYear();
+---
+<footer
+  class="px-[var(--spacing-gutter-sm)] md:px-[var(--spacing-gutter-md)] lg:px-[var(--spacing-gutter-lg)]"
+  style="padding-top: 3rem; padding-bottom: 3rem;"
+>
+  <Rule weight="hairline" />
+  <div style="display: grid; grid-template-columns: 1fr; gap: 2rem; margin-top: 2rem;" class="md:grid-cols-3">
+    <div>
+      <p style="font-family: var(--font-display); font-size: var(--text-lg); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.5rem;">THE AGENT SEES</p>
+      <p style="font-size: var(--text-sm); color: var(--color-mute); max-width: 22rem;">AI-powered MVPs, web apps, and the agents that run inside them. New studio. Built on conviction.</p>
+    </div>
+    <nav aria-label="Footer">
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.5rem; font-size: var(--text-sm);">
+        <li><a href="/work">Work</a></li>
+        <li><a href="/studio">Studio</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/terms">Terms</a></li>
+      </ul>
+    </nav>
+    <div style="font-size: var(--text-sm); color: var(--color-mute);">
+      <p>Remote · Worldwide</p>
+      <p><a href="mailto:hello@theagentsees.com">hello@theagentsees.com</a></p>
+      <p style="margin-top: 1rem;">© {year} The Agent Sees</p>
+    </div>
+  </div>
+</footer>

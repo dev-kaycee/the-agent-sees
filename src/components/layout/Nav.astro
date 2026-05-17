@@ -1,0 +1,58 @@
+---
+import Arrow from "../icons/Arrow.astro";
+const links = [
+  { href: "/work", label: "Work" },
+  { href: "/studio", label: "Studio" },
+  { href: "/contact", label: "Contact" },
+];
+const path = Astro.url.pathname;
+---
+<nav
+  aria-label="Main"
+  class="px-[var(--spacing-gutter-sm)] md:px-[var(--spacing-gutter-md)] lg:px-[var(--spacing-gutter-lg)]"
+  style="display: flex; align-items: center; justify-content: space-between; padding-top: 1.25rem; padding-bottom: 1.25rem;"
+>
+  <a href="/" style="font-family: var(--font-display); font-size: var(--text-base); letter-spacing: -0.01em; font-weight: 800;">
+    THE AGENT SEES
+  </a>
+
+  <!-- desktop nav -->
+  <ul class="hidden md:flex" style="list-style: none; margin: 0; padding: 0; gap: 2rem; align-items: center;">
+    {links.map((l) => (
+      <li>
+        <a
+          href={l.href}
+          style={`font-size: var(--text-sm); font-weight: 500; ${path === l.href ? "text-decoration: underline; text-underline-offset: 4px;" : ""}`}
+        >
+          {l.label}
+        </a>
+      </li>
+    ))}
+    <li>
+      <a
+        href="/contact"
+        style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--color-ink); color: var(--color-paper); padding: 0.6rem 1rem; font-size: var(--text-sm); font-weight: 500;"
+      >
+        Start a project
+        <Arrow size={14} />
+      </a>
+    </li>
+  </ul>
+
+  <!-- mobile nav (no JS — uses <details>) -->
+  <details class="md:hidden" style="position: relative;">
+    <summary
+      aria-label="Open menu"
+      style="list-style: none; cursor: pointer; padding: 0.5rem;"
+    >
+      <span style="display: block; width: 24px; height: 2px; background: var(--color-ink); margin: 3px 0;"></span>
+      <span style="display: block; width: 24px; height: 2px; background: var(--color-ink); margin: 3px 0;"></span>
+      <span style="display: block; width: 24px; height: 2px; background: var(--color-ink); margin: 3px 0;"></span>
+    </summary>
+    <ul style="position: absolute; right: 0; top: 100%; background: var(--color-paper); border: 1px solid var(--color-ink); list-style: none; margin: 0; padding: 1rem 1.5rem; min-width: 12rem; display: flex; flex-direction: column; gap: 0.75rem; z-index: 10;">
+      {links.map((l) => (
+        <li><a href={l.href} style="font-size: var(--text-sm); font-weight: 500;">{l.label}</a></li>
+      ))}
+    </ul>
+  </details>
+</nav>

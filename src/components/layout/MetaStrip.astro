@@ -1,0 +1,15 @@
+---
+interface Props {
+  middle?: string;
+  right?: string;
+}
+const { middle = "STUDIO · Nº01", right = "2026 →" } = Astro.props;
+---
+<div
+  class="px-[var(--spacing-gutter-sm)] md:px-[var(--spacing-gutter-md)] lg:px-[var(--spacing-gutter-lg)]"
+  style="display: grid; grid-template-columns: 1fr 1fr 1fr; padding-top: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-hairline); font-family: var(--font-sans); font-size: var(--text-xs); letter-spacing: var(--tracking-label); text-transform: uppercase; font-weight: 500; color: var(--color-ink);"
+>
+  <span>THE AGENT SEES</span>
+  <span style="text-align: center; color: var(--color-mute);">{middle}</span>
+  <span style="text-align: right; color: var(--color-mute);">{right}</span>
+</div>
