@@ -13,6 +13,10 @@
   },
   "routes": [
     {
+      "pattern": "theagentsees.com/*",
+      "zone_name": "theagentsees.com"
+    },
+    {
       "pattern": "dev.theagentsees.com/*",
       "zone_name": "theagentsees.com"
     }
