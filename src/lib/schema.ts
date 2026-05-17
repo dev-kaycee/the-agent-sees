@@ -1,91 +1,91 @@
 import { z } from "zod";
 
-/** Inbound payload from the LeadPipeline island. */
+/** Inbound payload from the OpsTeam island. */
 export const LeadInput = z.object({
   lead: z
     .string()
     .transform((s) => s.trim())
-    .pipe(z.string().min(1, "lead is required").max(2000, "lead too long")),
+    .pipe(z.string().min(1, "input is required").max(2000, "input too long")),
   ts_token: z.string().min(1, "Turnstile token required"),
 });
 export type LeadInput = z.infer<typeof LeadInput>;
 
-/** Stage 1 — Triage: classify + extract entities + spot signals. */
-export const Triage = z.object({
-  classification: z.enum([
-    "tire_kicker",
-    "mvp_build",
-    "agent_or_automation",
-    "integration",
-    "out_of_scope",
-  ]),
-  fit_score: z.union([
-    z.literal(1),
-    z.literal(2),
-    z.literal(3),
-    z.literal(4),
-    z.literal(5),
-  ]),
-  entities: z.object({
-    company: z.string().nullable(),
-    stage: z.string().nullable(),
-    team_size: z.string().nullable(),
-    industry: z.string().nullable(),
-    problem: z.string().min(1).max(300),
-    timeline: z.string().nullable(),
-    budget: z.string().nullable(),
-    tech_mentioned: z.array(z.string()).max(8),
-  }),
-  signals: z.array(z.string()).min(1).max(6),
-});
-export type Triage = z.infer<typeof Triage>;
+// Owner roles for ops tasks
+const OwnerRole = z.enum([
+  "founder",
+  "csm",
+  "engineer",
+  "ops",
+  "finance",
+  "support",
+  "marketing",
+]);
 
-/** Stage 2 — Discovery questions to ask before scoping. */
-export const Discovery = z.object({
-  questions: z
+// Outbound channels for the Customer Success message
+const Channel = z.enum(["email", "in_app_message", "phone_call", "slack_dm"]);
+
+/** Stage 1 — Customer Success: the customer-facing message. */
+export const CustomerResponse = z.object({
+  channel: Channel,
+  to: z.string().min(1).max(160).nullable(),
+  subject: z.string().min(1).max(200).nullable(),
+  body: z.string().min(40).max(2000),
+  tone_note: z.string().min(1).max(500),
+});
+export type CustomerResponse = z.infer<typeof CustomerResponse>;
+
+/** Stage 2 — Operations: internal task list with owners + timing. */
+export const OpsTasks = z.object({
+  tasks: z
     .array(
       z.object({
-        topic: z.string().min(1).max(60),
-        question: z.string().min(1).max(300),
+        title: z.string().min(1).max(300),
+        owner_role: OwnerRole,
+        when: z.string().min(1).max(80),
+        why: z.string().min(1).max(400),
       }),
     )
-    .min(2)
-    .max(4),
-});
-export type Discovery = z.infer<typeof Discovery>;
-
-/** Stage 3 — Proposed week-by-week scope. */
-export const Scope = z.object({
-  weeks: z
-    .array(
-      z.object({
-        label: z.string().min(1).max(60),
-        deliverable: z.string().min(1).max(400),
-      }),
-    )
-    .min(2)
+    .min(3)
     .max(8),
-  tech_stack: z.array(z.string()).min(2).max(8),
-  effort_pd: z.string().min(1).max(60),
-  risks: z.array(z.string()).max(4),
 });
-export type Scope = z.infer<typeof Scope>;
+export type OpsTasks = z.infer<typeof OpsTasks>;
 
-/** Stage 4 — Personalized draft reply + concrete next step. */
-export const Pitch = z.object({
-  reply: z.string().min(40).max(1200),
-  next_step: z.string().min(1).max(240),
+/** Stage 3 — Founder note: strategic angle + one personal action. */
+export const FounderNote = z.object({
+  strategic_angle: z.string().min(40).max(1500),
+  one_action: z.string().min(1).max(400),
+  tag: z.enum([
+    "referenceable_case_study",
+    "churn_risk",
+    "viral_moment",
+    "feedback_signal",
+    "expansion_opportunity",
+    "support_recovery",
+    "process_gap",
+    "growth_lever",
+    "none",
+  ]),
 });
-export type Pitch = z.infer<typeof Pitch>;
+export type FounderNote = z.infer<typeof FounderNote>;
+
+/** Stage 4 — Comms: internal Slack-style + optional external follow-up. */
+export const Comms = z.object({
+  slack: z.object({
+    channel: z.string().min(1).max(80),
+    text: z.string().min(20).max(1500),
+  }),
+  external_followup: z.string().min(1).max(800).nullable(),
+});
+export type Comms = z.infer<typeof Comms>;
 
 /** Server → client SSE envelope. */
 export type PipelineEvent =
-  | { stage: 1; data: Triage }
-  | { stage: 2; data: Discovery }
-  | { stage: 3; data: Scope }
-  | { stage: 4; data: Pitch };
+  | { stage: 1; data: CustomerResponse }
+  | { stage: 2; data: OpsTasks }
+  | { stage: 3; data: FounderNote }
+  | { stage: 4; data: Comms };
 
-/** Generic error envelope returned by the API. */
+/** Generic error envelope. */
 export const ApiError = z.object({
   ok: z.literal(false),
   error: z.enum([

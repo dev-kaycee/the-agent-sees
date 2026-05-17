@@ -4,14 +4,14 @@ export const prerender = true;
 import Base from "../components/layout/Base.astro";
 import Section from "../components/ui/Section.astro";
 import Rule from "../components/ui/Rule.astro";
-import LeadPipeline from "../components/islands/LeadPipeline.tsx";
+import OpsTeam from "../components/islands/OpsTeam.tsx";
 
 const builds = [
   {
     label: "Live",
-    title: "Lead Pipeline (this page)",
-    sub: "Four agents — Triage → Discovery → Scope → Pitch — running end-to-end on Cloudflare Workers AI. Paste a lead, watch them work.",
-    meta: "AI · Workers AI · SSE",
+    title: "Your ops team in a box",
+    sub: "Four agents — Customer Success, Operations, Founder, Comms — handle any business event in 15 seconds. Pick a sector, pick an example, watch them work.",
+    meta: "Agents · Workers AI · SSE",
   },
   {
     label: "In build",
@@ -23,14 +23,11 @@ const builds = [
 
 const nextUp = [
   "Contact form on D1 + Resend (Plan 3)",
-  "Per-stage streaming inside each agent",
-  "First real client engagement — write-up to follow",
+  "More sectors, more example scenarios",
+  "Wiring this into a real Slack workspace as a Bolt app",
 ];
 
-// Public site key for Cloudflare Turnstile. Safe to commit — it ships in HTML to every
-// visitor anyway. The matching secret lives as a Worker secret (TURNSTILE_SECRET_KEY).
-// We don't read this from import.meta.env because Astro reads that at build time from
-// .env files, NOT from wrangler.jsonc#vars (which is a Cloudflare runtime mechanism).
+// Public site key for Cloudflare Turnstile.
 const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
 ---
 <Base title="Work — The Agent Sees" metaMiddle="WORK · DEMOS" metaRight="2026 →">
@@ -38,9 +35,9 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
   <section class="work-hero">
     <div class="work-hero__inner">
       <p class="label">Work / Demos</p>
-      <h1 class="work-hero__head">A four-agent pipeline you can run on yourself.</h1>
+      <h1 class="work-hero__head">Four agents.<br />The work of a small team.<br />In fifteen seconds.</h1>
       <p class="work-hero__sub">
-        Paste an inbound lead. Watch four agents triage it, draft discovery questions, propose a week-by-week scope, and write the reply we'd actually send. Running on a free model. No accounts, no signup.
+        Drop in a real event from your business — a new customer, an angry refund, a 1-star review, a referral. Four AI agents act as four roles on your team: Customer Success drafts the reply, Operations writes the task list, the Founder note surfaces the strategy, and Comms posts the team announcement. One input. Four artifacts. Fifteen seconds.
       </p>
     </div>
   </section>
@@ -48,25 +45,28 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
   <Rule weight="ink" />
 
   <!-- DEMO -->
-  <Section label="Live demo · Lead Pipeline" id="demo">
+  <Section label="Live demo · Your ops team in a box" id="demo">
     <div class="demo-shell">
       <div class="demo-shell__copy">
-        <h2 class="demo-shell__head">Four agents.<br />One pipeline.</h2>
+        <h2 class="demo-shell__head">One event in.<br />A whole team out.</h2>
         <p class="demo-shell__body">
-          <strong>Triage</strong> classifies the lead and pulls out entities.
-          <strong>Discovery</strong> drafts the questions we'd ask on a call.
-          <strong>Scope</strong> proposes a week-by-week plan with a tech stack and effort estimate.
-          <strong>Pitch</strong> writes the founder-voice reply with a concrete next step.
+          <strong>Customer Success</strong> writes the message you'd send the customer.
         </p>
         <p class="demo-shell__body">
-          Each step is its own model call, streamed back as it completes. Llama 3.3 70B via Cloudflare Workers AI. Rate-limited (5/min/IP, 1000/day total). Free for you to use.
+          <strong>Operations</strong> turns it into a task list — who does what, by when, why.
+        </p>
+        <p class="demo-shell__body">
+          <strong>Founder</strong> surfaces the strategic angle and the one thing only you can do.
+        </p>
+        <p class="demo-shell__body">
+          <strong>Comms</strong> posts to the team and drafts the external angle if there is one.
         </p>
         <p class="demo-shell__body demo-shell__body--mute">
-          This is roughly what we'd build inside your inbound flow — except wired to your CRM, your data, and your team's tone.
+          Six sectors of starter examples — SaaS, e-commerce, agency, local, coach, clinic. Or type your own. Free model. No signup.
         </p>
       </div>
       <div class="demo-shell__island">
-        <LeadPipeline client:visible turnstileSiteKey={turnstileSiteKey} />
+        <OpsTeam client:visible turnstileSiteKey={turnstileSiteKey} />
       </div>
     </div>
   </Section>
@@ -104,7 +104,7 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
         ))}
       </ol>
       <p class="next__foot">
-        Want a pipeline built around your data? <a href="/contact" class="next__link">Tell us what you're building.</a>
+        Want this team wired into your inbox or CRM? <a href="/contact" class="next__link">Tell us what you're building.</a>
       </p>
     </div>
   </Section>
@@ -122,14 +122,14 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     font-size: var(--text-3xl);
     line-height: 1.0;
     margin: 1rem 0 1.5rem;
-    max-width: 28ch;
+    max-width: 22ch;
   }
   @media (min-width: 48rem) { .work-hero__head { font-size: var(--text-4xl); } }
   @media (min-width: 64rem) { .work-hero__head { font-size: var(--text-5xl); } }
   .work-hero__sub {
     font-size: var(--text-base);
     color: var(--color-mute);
-    max-width: 38rem;
+    max-width: 44rem;
     line-height: 1.6;
   }
 
@@ -138,12 +138,12 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 2.5rem;
-    max-width: 92rem;
+    max-width: 96rem;
     margin-inline: auto;
     align-items: start;
   }
   @media (min-width: 64rem) {
-    .demo-shell { grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); column-gap: 4rem; }
+    .demo-shell { grid-template-columns: minmax(0, 1fr) minmax(0, 1.8fr); column-gap: 4rem; }
   }
   .demo-shell__head {
     font-size: var(--text-2xl);
@@ -155,11 +155,11 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
   .demo-shell__body {
     font-size: var(--text-base);
     color: var(--color-ink);
-    line-height: 1.7;
-    margin-bottom: 1.25rem;
-    max-width: 36rem;
+    line-height: 1.65;
+    margin-bottom: 1rem;
+    max-width: 32rem;
   }
-  .demo-shell__body--mute { color: var(--color-mute); font-size: var(--text-sm); }
+  .demo-shell__body--mute { color: var(--color-mute); font-size: var(--text-sm); margin-top: 0.5rem; }
   .demo-shell__body strong { font-weight: 700; }
 
   /* BUILDS */
@@ -192,10 +192,7 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     color: var(--color-mute);
   }
   .build__label { color: var(--color-ink); }
-  .build__title {
-    font-size: var(--text-xl);
-    line-height: 1.05;
-  }
+  .build__title { font-size: var(--text-xl); line-height: 1.05; }
   .build__sub {
     font-size: var(--text-base);
     color: var(--color-mute);
@@ -236,15 +233,18 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     color: var(--color-ink);
   }
 
-  /* PIPELINE ISLAND host */
+  /* ISLAND host */
   .demo-shell__island {
     border: 1px solid var(--color-ink);
     background: var(--color-paper);
     padding: 1.5rem;
   }
 
-  /* LeadPipeline internal styles — scoped via :global() */
-  :global(.pl) {
+  /* ============================================================
+     OpsTeam island styles — scoped via :global()
+     ============================================================ */
+
+  :global(.ot) {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -252,239 +252,246 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
   }
 
   /* form */
-  :global(.pl__form) {
+  :global(.ot__form) {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1.25rem;
   }
-  :global(.pl__label-row) {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 1rem;
-  }
-  :global(.pl__label) {
+  :global(.ot__label) {
+    font-family: var(--font-sans);
     font-size: var(--text-xs);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
     color: var(--color-mute);
+    margin: 0 0 0.5rem 0;
   }
-  :global(.pl__example-btn) {
-    background: none;
-    border: 0;
-    padding: 0;
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--color-ink);
+
+  /* sector tabs */
+  :global(.ot__sectors) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  :global(.ot__sector) {
+    background: var(--color-paper);
+    border: 1px solid var(--color-hairline);
+    color: var(--color-mute);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    padding: 0.4rem 0.85rem;
     cursor: pointer;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    transition: all 120ms ease;
   }
-  :global(.pl__example-btn:disabled) {
-    opacity: 0.4;
-    cursor: not-allowed;
+  :global(.ot__sector:hover:not(:disabled)) {
+    color: var(--color-ink);
+    border-color: var(--color-ink);
   }
-  :global(.pl__textarea) {
+  :global(.ot__sector--active) {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+  :global(.ot__sector:disabled) { opacity: 0.5; cursor: not-allowed; }
+
+  /* example chips */
+  :global(.ot__examples) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  :global(.ot__example) {
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-hairline);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    padding: 0.4rem 0.85rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 120ms ease;
+  }
+  :global(.ot__example:hover:not(:disabled)) {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    border-color: var(--color-ink);
+  }
+  :global(.ot__example:disabled) { opacity: 0.5; cursor: not-allowed; }
+
+  /* textarea + actions */
+  :global(.ot__textarea) {
     font-family: var(--font-sans);
     font-size: var(--text-base);
-    line-height: 1.5;
+    line-height: 1.55;
     padding: 0.75rem;
     border: 1px solid var(--color-ink);
     background: var(--color-paper);
     color: var(--color-ink);
     resize: vertical;
-    min-height: 6rem;
+    min-height: 7rem;
+    width: 100%;
+    box-sizing: border-box;
   }
-  :global(.pl__textarea:focus-visible) {
+  :global(.ot__textarea:focus-visible) {
     outline: 2px solid var(--color-ink);
     outline-offset: 2px;
   }
-  :global(.pl__row) {
+  :global(.ot__row) {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 1rem;
     font-family: var(--font-mono);
     font-size: var(--text-xs);
+    margin-top: 0.65rem;
   }
-  :global(.pl__count) { color: var(--color-mute); }
-  :global(.pl__actions) { display: flex; gap: 0.5rem; }
-  :global(.pl__btn) {
+  :global(.ot__count) { color: var(--color-mute); }
+  :global(.ot__actions) { display: flex; gap: 0.5rem; }
+  :global(.ot__btn) {
     background: var(--color-ink);
     color: var(--color-paper);
-    padding: 0.55rem 1.1rem;
+    padding: 0.6rem 1.2rem;
     font-size: var(--text-sm);
     font-weight: 500;
     border: 0;
     cursor: pointer;
     font-family: var(--font-sans);
   }
-  :global(.pl__btn:hover:not(:disabled)) { background: var(--color-mute); }
-  :global(.pl__btn:disabled) { opacity: 0.5; cursor: not-allowed; }
-  :global(.pl__btn--ghost) {
+  :global(.ot__btn:hover:not(:disabled)) { background: var(--color-mute); }
+  :global(.ot__btn:disabled) { opacity: 0.5; cursor: not-allowed; }
+  :global(.ot__btn--ghost) {
     background: transparent;
     color: var(--color-ink);
     border: 1px solid var(--color-ink);
   }
-  :global(.pl__btn--ghost:hover) {
+  :global(.ot__btn--ghost:hover) {
     background: var(--color-ink);
     color: var(--color-paper);
   }
-  :global(.pl__turnstile) { min-height: 0; }
-  :global(.pl__error) {
+  :global(.ot__turnstile) { min-height: 0; }
+  :global(.ot__error) {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
     color: var(--color-ink);
     border-top: 1px solid var(--color-hairline);
     padding-top: 1rem;
   }
-  :global(.pl__disclaimer) {
+  :global(.ot__disclaimer) {
     font-size: var(--text-xs);
     color: var(--color-mute);
-    line-height: 1.5;
-    max-width: 42rem;
+    line-height: 1.55;
+    max-width: 46rem;
     margin: 0;
   }
 
-  /* steps list */
-  :global(.pl__steps) {
+  /* roles list */
+  :global(.ot__roles) {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.6rem;
     border-top: 1px solid var(--color-hairline);
     padding-top: 1rem;
   }
-  :global(.pl-step) {
+  :global(.ot-role) {
     border: 1px solid var(--color-hairline);
     background: var(--color-paper);
-    padding: 0.85rem 1rem;
+    padding: 0.9rem 1.1rem;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    animation: pl-fade-in 280ms ease-out;
+    gap: 0.85rem;
+    animation: ot-fade-in 260ms ease-out;
   }
-  :global(.pl-step--active) {
+  :global(.ot-role--active) {
     border-color: var(--color-ink);
     box-shadow: inset 3px 0 0 var(--color-ink);
   }
-  :global(.pl-step--done) {
-    border-color: var(--color-ink);
-  }
-  :global(.pl-step__head) {
+  :global(.ot-role--done) { border-color: var(--color-ink); }
+  :global(.ot-role__head) {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.85rem;
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
   }
-  :global(.pl-step__num) {
-    color: var(--color-mute);
-    min-width: 1.5rem;
-  }
-  :global(.pl-step__title) { color: var(--color-ink); flex: 1; }
-  :global(.pl-step__status) {
+  :global(.ot-role__num) { color: var(--color-mute); min-width: 1.5rem; }
+  :global(.ot-role__title) { color: var(--color-ink); flex: 1; }
+  :global(.ot-role__status) {
     display: inline-flex;
     align-items: center;
     color: var(--color-ink);
   }
-  :global(.pl-step__pending) {
-    color: var(--color-mute);
-    font-size: var(--text-xs);
-  }
-  :global(.pl-step__body) {
+  :global(.ot-role__pending) { color: var(--color-mute); font-size: var(--text-xs); }
+  :global(.ot-role__body) {
     border-top: 1px dashed var(--color-hairline);
-    padding-top: 0.85rem;
+    padding-top: 0.9rem;
   }
 
-  /* stage body shared */
-  :global(.pl-stage) {
+  /* shared card primitives */
+  :global(.ot-card) {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.85rem;
     font-size: var(--text-sm);
   }
-  :global(.pl-stage__row) {
-    display: grid;
-    grid-template-columns: 8rem 1fr;
-    gap: 1rem;
-    align-items: baseline;
+  :global(.ot-card__note) {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-mute);
+    margin: 0;
+    line-height: 1.5;
   }
-  :global(.pl-stage__row--col) {
-    grid-template-columns: 1fr;
-    gap: 0.4rem;
-  }
-  :global(.pl-stage__k) {
+  :global(.ot-pl-k) {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: var(--tracking-label);
     text-transform: uppercase;
     color: var(--color-mute);
   }
-  :global(.pl-stage__v) {
+  :global(.ot-pl-v) {
+    font-size: var(--text-sm);
     color: var(--color-ink);
     line-height: 1.55;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    flex-wrap: wrap;
   }
-  :global(.pl-stage__v--mono) { font-family: var(--font-mono); }
-  :global(.pl-pills) {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-  :global(.pl-pill) {
-    background: var(--color-paper-2);
+
+  /* Stage 1 — email card */
+  :global(.ot-email) {
     border: 1px solid var(--color-hairline);
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    padding: 0.2rem 0.55rem;
+    background: var(--color-paper-2);
   }
-  :global(.pl-bullets) {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  :global(.ot-email__head) {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--color-hairline);
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.4rem;
   }
-  :global(.pl-bullets li) {
-    padding-left: 1rem;
-    position: relative;
-    line-height: 1.5;
+  :global(.ot-email__line) {
+    display: grid;
+    grid-template-columns: 5rem 1fr;
+    gap: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
   }
-  :global(.pl-bullets li::before) {
-    content: "—";
-    position: absolute;
-    left: 0;
+  :global(.ot-email__k) {
     color: var(--color-mute);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+  :global(.ot-email__v) { color: var(--color-ink); }
+  :global(.ot-email__v--strong) { font-family: var(--font-sans); font-weight: 600; font-size: var(--text-sm); }
+  :global(.ot-email__body) {
+    padding: 1rem;
+    line-height: 1.65;
+    color: var(--color-ink);
+    white-space: pre-wrap;
   }
 
-  /* fit bar */
-  :global(.pl-fit) {
-    display: inline-flex;
-    gap: 2px;
-  }
-  :global(.pl-fit__seg) {
-    width: 14px;
-    height: 8px;
-    background: var(--color-paper-2);
-    border: 1px solid var(--color-hairline);
-  }
-  :global(.pl-fit__seg--on) {
-    background: var(--color-ink);
-    border-color: var(--color-ink);
-  }
-  :global(.pl-fit__val) { font-family: var(--font-mono); font-size: var(--text-xs); }
-
-  /* discovery questions */
-  :global(.pl-questions) {
+  /* Stage 2 — ops tasks */
+  :global(.ot-tasks) {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -492,68 +499,51 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     flex-direction: column;
     gap: 0.85rem;
   }
-  :global(.pl-questions li) {
+  :global(.ot-task) {
     display: grid;
-    grid-template-columns: 2rem 1fr;
-    gap: 0.75rem;
-    align-items: baseline;
+    grid-template-columns: 1.5rem 1fr;
+    gap: 0.85rem;
+    align-items: start;
   }
-  :global(.pl-questions__num) {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-label);
-    color: var(--color-mute);
+  :global(.ot-task__check) {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid var(--color-ink);
+    margin-top: 0.2rem;
   }
-  :global(.pl-questions__body) {
+  :global(.ot-task__body) {
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.3rem;
   }
-  :global(.pl-questions__topic) {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--color-mute);
-  }
-  :global(.pl-questions__q) {
-    font-size: var(--text-base);
-    line-height: 1.5;
-    color: var(--color-ink);
-  }
-
-  /* scope weeks */
-  :global(.pl-weeks) {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    border-top: 1px solid var(--color-ink);
-  }
-  :global(.pl-weeks li) {
-    border-bottom: 1px solid var(--color-hairline);
-    padding: 0.65rem 0;
-    display: grid;
-    grid-template-columns: 10rem 1fr;
-    gap: 1rem;
-    align-items: baseline;
-  }
-  :global(.pl-weeks__label) {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--color-ink);
-  }
-  :global(.pl-weeks__deliv) {
+  :global(.ot-task__title) {
     font-size: var(--text-sm);
-    line-height: 1.55;
+    line-height: 1.45;
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+  :global(.ot-task__meta) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  :global(.ot-pill) {
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-hairline);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    padding: 0.15rem 0.5rem;
     color: var(--color-ink);
   }
+  :global(.ot-pill--when) { background: var(--color-ink); color: var(--color-paper); border-color: var(--color-ink); }
+  :global(.ot-task__why) {
+    font-size: var(--text-xs);
+    color: var(--color-mute);
+    line-height: 1.5;
+  }
 
-  /* pitch reply */
-  :global(.pl-reply) {
+  /* Stage 3 — founder quote */
+  :global(.ot-quote) {
     margin: 0;
     padding: 1rem 1.25rem;
     background: var(--color-paper-2);
@@ -561,24 +551,74 @@ const turnstileSiteKey = "0x4AAAAAADRM5l2r0QMiXnmH";
     font-size: var(--text-base);
     line-height: 1.65;
     font-style: normal;
+    color: var(--color-ink);
+  }
+  :global(.ot-founder-row) {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
+  }
+  :global(.ot-tag) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  :global(.ot-tag__label) {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+  }
+  :global(.ot-tag__val) {
+    background: var(--color-highlight);
+    padding: 0.1rem 0.5rem;
+    font-size: var(--text-sm);
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  /* Stage 4 — Slack message */
+  :global(.ot-slack) {
+    border: 1px solid var(--color-hairline);
+    background: var(--color-paper-2);
+    padding: 0.85rem 1rem;
+  }
+  :global(.ot-slack__channel) {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-mute);
+    margin-bottom: 0.5rem;
+  }
+  :global(.ot-slack__text) {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-ink);
+    white-space: pre-wrap;
+  }
+  :global(.ot-followup) {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1rem;
+    align-items: baseline;
   }
 
   /* spinner */
-  :global(.pl-spinner) {
-    animation: pl-spin 800ms linear infinite;
+  :global(.ot-spinner) {
+    animation: ot-spin 800ms linear infinite;
     transform-origin: center;
   }
-
-  @keyframes pl-spin {
+  @keyframes ot-spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
   }
-  @keyframes pl-fade-in {
+  @keyframes ot-fade-in {
     from { opacity: 0; transform: translateY(4px); }
     to { opacity: 1; transform: translateY(0); }
   }
   @media (prefers-reduced-motion: reduce) {
-    :global(.pl-step) { animation: none; }
-    :global(.pl-spinner) { animation: none; }
+    :global(.ot-role) { animation: none; }
+    :global(.ot-spinner) { animation: none; }
   }
 </style>

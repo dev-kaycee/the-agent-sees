@@ -3,10 +3,10 @@ import { LeadInput } from "../../../lib/schema.js";
 import { verifyTurnstile } from "../../../lib/turnstile.js";
 import { checkLimit, ipKey, dailyCapKey } from "../../../lib/rate-limit.js";
 import {
-  runTriage,
-  runDiscovery,
-  runScope,
-  runPitch,
+  runCustomer,
+  runOps,
+  runFounder,
+  runComms,
   type AiBinding,
 } from "../../../lib/ai.js";
 import type { Limiter } from "../../../lib/rate-limit.js";
@@ -34,14 +34,12 @@ const SSE_HEADERS = {
   "Content-Type": "text/event-stream; charset=utf-8",
   "Cache-Control": "no-cache, no-transform",
   Connection: "keep-alive",
-  // Cloudflare specific — disable response buffering so events land in real time.
   "X-Accel-Buffering": "no",
 };
 
 export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   const env = (locals as { runtime: { env: Env } }).runtime.env;
 
-  // 1. Validate input
   let parsed;
   try {
     const body = await request.json();
@@ -50,7 +48,6 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     return jsonError(400, "invalid_input", e instanceof Error ? e.message : "Invalid input");
   }
 
-  // 2. Verify Turnstile
   const turnstile = await verifyTurnstile(
     parsed.ts_token,
     env.TURNSTILE_SECRET_KEY,
@@ -65,7 +62,6 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     );
   }
 
-  // 3. Rate limits
   const ipCheck = await checkLimit(
     env.RATE_LIMIT,
     ipKey(clientAddress ?? "unknown"),
@@ -103,7 +99,6 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     );
   }
 
-  // 4. Stream pipeline events via SSE
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       const encoder = new TextEncoder();
@@ -113,28 +108,20 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
         );
       };
 
-      // Heartbeat / open ack so the client knows the stream is alive.
       send("open", { ok: true });
 
       try {
-        const triage = await runTriage(env.AI, MODEL, parsed.lead);
-        send("stage", { stage: 1, data: triage });
+        const customer = await runCustomer(env.AI, MODEL, parsed.lead);
+        send("stage", { stage: 1, data: customer });
 
-        const discovery = await runDiscovery(env.AI, MODEL, parsed.lead, triage);
-        send("stage", { stage: 2, data: discovery });
+        const ops = await runOps(env.AI, MODEL, parsed.lead);
+        send("stage", { stage: 2, data: ops });
 
-        const scope = await runScope(env.AI, MODEL, parsed.lead, triage);
-        send("stage", { stage: 3, data: scope });
+        const founder = await runFounder(env.AI, MODEL, parsed.lead);
+        send("stage", { stage: 3, data: founder });
 
-        const pitch = await runPitch(
-          env.AI,
-          MODEL,
-          parsed.lead,
-          triage,
-          discovery,
-          scope,
-        );
-        send("stage", { stage: 4, data: pitch });
+        const comms = await runComms(env.AI, MODEL, parsed.lead);
+        send("stage", { stage: 4, data: comms });
 
         send("done", { ok: true });
       } catch (e) {

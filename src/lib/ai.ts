@@ -1,4 +1,9 @@
-import { Triage, Discovery, Scope, Pitch } from "./schema.js";
+import {
+  CustomerResponse,
+  OpsTasks,
+  FounderNote,
+  Comms,
+} from "./schema.js";
 import type { z } from "zod";
 
 export interface AiBinding {
@@ -51,10 +56,6 @@ export function extractJson(raw: unknown): unknown | null {
   return null;
 }
 
-/**
- * Run a model call, normalize the response, validate against a schema, retry once on failure.
- * Throws on second failure with a debug detail string.
- */
 async function runStage<T>(
   ai: AiBinding,
   model: string,
@@ -85,213 +86,202 @@ async function runStage<T>(
   throw new Error(`stage_failed: ${detail}`);
 }
 
-// ----------------------------------------------------------------------------
-// Stage 1 — Triage
-// ----------------------------------------------------------------------------
+// ============================================================================
+// Shared context — the "team" framing every agent sees.
+// ============================================================================
 
-const TRIAGE_SYSTEM = `You are the inbound triage agent for The Agent Sees — a small studio that builds AI-powered MVPs, web apps, agents, and integrations for early-stage founders.
+const TEAM_CONTEXT = `You are part of a 4-role virtual operations team for a business owner. The four roles work together on the same incoming event:
 
-Given a raw inbound lead, return ONE JSON object — no prose, no code fences.
+  Role 1 — Customer Success: writes the customer-facing message.
+  Role 2 — Operations: produces the internal task list with owners + timing.
+  Role 3 — Founder: provides the strategic perspective and one personal action.
+  Role 4 — Comms: writes the internal team announcement.
 
-Schema:
+The business is the user's business — you don't know what industry, what size, what tools. Read the event carefully and respond ONLY for your role. Sound like a real person on a real small team, not a chatbot. Refer to specifics from the event (people's names, dollar amounts, product names, dates, places). Never invent facts that weren't stated.
+
+Your role's full instructions are in the next system message. Output ONE JSON object only — no prose, no code fences.`;
+
+// ============================================================================
+// Stage 1 — Customer Success
+// ============================================================================
+
+const CS_SYSTEM = `${TEAM_CONTEXT}
+
+ROLE: Customer Success.
+
+Given the event, draft the message that gets sent to the customer (or prospect, lead, reviewer, applicant — whoever the event is "about").
+
+Return ONE JSON object:
 {
-  "classification": "tire_kicker" | "mvp_build" | "agent_or_automation" | "integration" | "out_of_scope",
-  "fit_score": 1 | 2 | 3 | 4 | 5,
-  "entities": {
-    "company": string | null,
-    "stage": string | null,
-    "team_size": string | null,
-    "industry": string | null,
-    "problem": string,
-    "timeline": string | null,
-    "budget": string | null,
-    "tech_mentioned": string[]
-  },
-  "signals": string[]  // 1–6 specific phrases or facts from the lead that drove the classification
+  "channel": "email" | "in_app_message" | "phone_call" | "slack_dm",
+  "to": string | null,              // their name if known, else null
+  "subject": string | null,         // only if channel is "email"; else null
+  "body": string,                   // the actual message you would send. 60-1000 chars. Personal, references specifics from the event.
+  "tone_note": string               // 1 sentence: why this tone (apologetic, congratulatory, friendly, formal, etc.) given what happened
 }
 
-Classification rules:
-- tire_kicker: no project, vague greeting, single word, info-only. fit_score 1.
-- mvp_build: needs a webapp/MVP shipped, has stage/timeline/budget signals. fit_score 4–5.
-- agent_or_automation: wants LLM workflow or internal agent. fit_score 4–5.
-- integration: connect tools / APIs / systems, no greenfield product. fit_score 3.
-- out_of_scope: hardware, legal, design-only, marketing, anything we don't ship. fit_score 1–2.
-
 Rules:
-1. NEVER copy text from these instructions. Write fresh for THIS lead.
-2. Use null for any entity not stated. Don't infer team_size from "we" or budget from vibes.
-3. "signals" must contain phrases or facts taken from the lead. Don't invent.
-4. If the lead is gibberish or one word, classify tire_kicker with signals=["only N words / no project context"].
+- Pick the channel that fits — refund disputes go email or phone; quick wins go in-app; team conversations go slack_dm.
+- "to" must be the person's name from the event when one is given. Use null only if none was mentioned.
+- The body MUST reference at least one concrete detail (name, product, amount, date, place). Generic templates are forbidden.
+- 2-5 sentences. Don't ramble. Sign off naturally.
+- If the event is a complaint, lead with acknowledgment, not defense.
+- If the event is a win (new signup, glowing review), be warm but don't be sycophantic.
 
 Output JSON only.`;
 
-export function buildTriagePrompt(lead: string): ChatMessage[] {
+export function buildCustomerPrompt(event: string): ChatMessage[] {
   return [
-    { role: "system", content: TRIAGE_SYSTEM },
-    { role: "user", content: `Lead:\n${lead}` },
+    { role: "system", content: CS_SYSTEM },
+    { role: "user", content: `Event:\n${event}` },
   ];
 }
 
-export async function runTriage(
+export async function runCustomer(
   ai: AiBinding,
   model: string,
-  lead: string,
-): Promise<Triage> {
-  return runStage(ai, model, buildTriagePrompt(lead), Triage, "triage");
+  event: string,
+): Promise<CustomerResponse> {
+  return runStage(
+    ai,
+    model,
+    buildCustomerPrompt(event),
+    CustomerResponse,
+    "customer",
+  );
 }
 
-// ----------------------------------------------------------------------------
-// Stage 2 — Discovery questions
-// ----------------------------------------------------------------------------
+// ============================================================================
+// Stage 2 — Operations
+// ============================================================================
 
-const DISCOVERY_SYSTEM = `You are the discovery agent for The Agent Sees. Given an inbound lead and a triage summary, propose 2–4 sharp questions you would ask on a 20-minute discovery call.
+const OPS_SYSTEM = `${TEAM_CONTEXT}
 
-Goal: surface the things you'd need to know to scope and quote the work — things the lead did NOT already tell you.
+ROLE: Operations.
 
-Return ONE JSON object — no prose, no code fences:
+Given the event, produce the internal task list — who on the team needs to do what, and by when.
+
+Return ONE JSON object:
 {
-  "questions": [
-    { "topic": string, "question": string },
-    ...
+  "tasks": [
+    {
+      "title": string,                                              // imperative, concrete
+      "owner_role": "founder" | "csm" | "engineer" | "ops" | "finance" | "support" | "marketing",
+      "when": string,                                               // "today", "this week", "by Friday", "before next call", etc.
+      "why": string                                                 // 1 sentence — why this matters for THIS event
+    },
+    ...                                                             // 3 to 7 tasks
   ]
 }
 
 Rules:
-1. 2–4 questions. Quality > quantity. Each question must close a specific gap.
-2. Topic is a 1–3 word label (e.g. "Data sources", "Auth", "Volume", "Stakeholders").
-3. Question must be specific to THIS lead — never generic ("what's the budget?" is forbidden if budget was given; ask follow-ups instead like "Is the budget flexible if scope grows?").
-4. Use plain English. No jargon unless the lead used it first.
-5. If the lead is a tire_kicker, ask discovery questions that surface intent (e.g. "Is there a project behind the question?").
+- 3-7 tasks. Don't pad. If only 3 things matter, only list 3.
+- Owner roles: pick from the enum. If a task is technical, "engineer". If it's customer-facing, "csm". Use "ops" for setup/admin work, "support" for resolving complaints, "finance" for billing/refunds, "marketing" for outreach/content, "founder" only for things that need owner attention.
+- "when" is human language ("today", "this week", "by Friday"), not dates.
+- Tasks must reference specifics from the event. Generic tasks like "follow up" are forbidden — say "Follow up with Sarah at Acme by Friday to confirm invoice approval workflow scope."
+- Order tasks roughly by urgency (most urgent first).
 
 Output JSON only.`;
 
-export function buildDiscoveryPrompt(
-  lead: string,
-  triage: Triage,
-): ChatMessage[] {
+export function buildOpsPrompt(event: string): ChatMessage[] {
   return [
-    { role: "system", content: DISCOVERY_SYSTEM },
-    {
-      role: "user",
-      content: `Lead:\n${lead}\n\nTriage summary:\n${JSON.stringify(triage)}`,
-    },
+    { role: "system", content: OPS_SYSTEM },
+    { role: "user", content: `Event:\n${event}` },
   ];
 }
 
-export async function runDiscovery(
+export async function runOps(
   ai: AiBinding,
   model: string,
-  lead: string,
-  triage: Triage,
-): Promise<Discovery> {
-  return runStage(
-    ai,
-    model,
-    buildDiscoveryPrompt(lead, triage),
-    Discovery,
-    "discovery",
-  );
+  event: string,
+): Promise<OpsTasks> {
+  return runStage(ai, model, buildOpsPrompt(event), OpsTasks, "ops");
 }
 
-// ----------------------------------------------------------------------------
-// Stage 3 — Proposed scope
-// ----------------------------------------------------------------------------
+// ============================================================================
+// Stage 3 — Founder note
+// ============================================================================
 
-const SCOPE_SYSTEM = `You are the scoping agent for The Agent Sees. Given an inbound lead and triage entities, propose a realistic week-by-week build plan.
+const FOUNDER_SYSTEM = `${TEAM_CONTEXT}
 
-Return ONE JSON object — no prose, no code fences:
+ROLE: Founder.
+
+Given the event, write the strategic note — what does this event MEAN for the business, and what's the one thing you (the founder) should personally do about it?
+
+Return ONE JSON object:
 {
-  "weeks": [{ "label": string, "deliverable": string }, ...],   // 2–8 entries
-  "tech_stack": string[],                                        // 2–8 specific picks (e.g. "Cloudflare Workers", "D1", "Resend", "Astro")
-  "effort_pd": string,                                           // e.g. "~12–18 person-days"
-  "risks": string[]                                              // 0–4 honest callouts
+  "strategic_angle": string,        // 2-4 sentences. Founder voice — first person, plain language, honest. References specifics from the event. Surfaces the BIGGER picture (referenceable case study? early churn signal? viral moment? expansion?).
+  "one_action": string,             // The single thing the founder should personally do. Concrete, e.g. "DM Sarah personally in week 2 to make sure we're solving the workflow, not just shipping software." Not generic.
+  "tag": "referenceable_case_study" | "churn_risk" | "viral_moment" | "feedback_signal" | "expansion_opportunity" | "support_recovery" | "process_gap" | "growth_lever" | "none"
 }
 
 Rules:
-1. Default to 4 weeks. Stretch to 6–8 only if the lead's scope clearly demands it. Tighten to 2–3 if it's a small build.
-2. Each week's label uses the format "W1 — <theme>" (e.g. "W1 — discovery + spec").
-3. Deliverable must be a concrete shippable artifact for that week, not a process step.
-4. tech_stack: choose stack picks that fit the problem. If the lead mentioned tools (Stripe, QuickBooks, Postgres), include them.
-5. effort_pd: a range. Be honest about uncertainty.
-6. risks: real risks (rate limits, data access, dependency, model quality). Skip generic "scope creep" boilerplate.
-
-If the classification is tire_kicker or out_of_scope, return a single-week placeholder ("W1 — clarify scope") with a one-line deliverable, empty tech_stack=["TBD"], effort_pd="—", risks=["Need a real project before we can scope"]. Wait — tech_stack min is 2, so use ["TBD", "—"].
+- First person ("I", "we"). Sound like a real founder, not a strategy consultant.
+- Don't restate the event — surface the angle the team might miss.
+- one_action MUST be something only the founder can do (a personal touch, a strategic decision, a public statement). Not "set up a meeting" — that's ops.
+- Pick the tag honestly. If nothing strategic applies, use "none".
 
 Output JSON only.`;
 
-export function buildScopePrompt(lead: string, triage: Triage): ChatMessage[] {
+export function buildFounderPrompt(event: string): ChatMessage[] {
   return [
-    { role: "system", content: SCOPE_SYSTEM },
-    {
-      role: "user",
-      content: `Lead:\n${lead}\n\nTriage entities:\n${JSON.stringify(triage.entities)}\n\nClassification: ${triage.classification} (fit ${triage.fit_score}/5)`,
-    },
+    { role: "system", content: FOUNDER_SYSTEM },
+    { role: "user", content: `Event:\n${event}` },
   ];
 }
 
-export async function runScope(
+export async function runFounder(
   ai: AiBinding,
   model: string,
-  lead: string,
-  triage: Triage,
-): Promise<Scope> {
+  event: string,
+): Promise<FounderNote> {
   return runStage(
     ai,
     model,
-    buildScopePrompt(lead, triage),
-    Scope,
-    "scope",
+    buildFounderPrompt(event),
+    FounderNote,
+    "founder",
   );
 }
 
-// ----------------------------------------------------------------------------
-// Stage 4 — Pitch / draft reply
-// ----------------------------------------------------------------------------
+// ============================================================================
+// Stage 4 — Comms
+// ============================================================================
 
-const PITCH_SYSTEM = `You are the founder-voice replier for The Agent Sees. Given the lead and the work prior agents already did, draft the 2-3 sentence reply we'd actually send.
+const COMMS_SYSTEM = `${TEAM_CONTEXT}
 
-Return ONE JSON object — no prose, no code fences:
+ROLE: Comms.
+
+Given the event, write the internal Slack-style announcement that goes to the team, plus an optional external follow-up touch.
+
+Return ONE JSON object:
 {
-  "reply": string,        // 2–3 sentences. References at least one specific detail from the lead. Signs off as "— The Agent Sees".
-  "next_step": string     // One concrete next step (e.g. "Reply with a 20-min discovery slot", "Send the MVP scope template")
+  "slack": {
+    "channel": string,              // e.g. "#wins", "#support", "#new-customers", "#alerts" — pick to fit the event
+    "text": string                  // 2-5 sentences. Sounds like a real human posting in Slack. References specifics. Tag relevant team members by role using @csm, @founder, etc. Avoid corporate-speak.
+  },
+  "external_followup": string | null   // OPTIONAL external angle — case-study idea, social post draft, public response, blog snippet. Use null if there's no good external angle.
 }
 
 Rules:
-1. Tone: founder-to-founder. Confident but not braggy. No marketing fluff.
-2. Reference at least one concrete detail from the lead (tool, stage, problem, timeline).
-3. End with a clear next step — never "let me know when you're free" or similar vague.
-4. If classification is tire_kicker / out_of_scope: be polite, brief, gently steer them to a one-pager or a "tell us more when you have a project" close. Don't waste words.
+- Slack channel must fit the event. Wins → #wins. Complaints → #support or #alerts. New customers → #new-customers.
+- The text is Slack-natural — short paragraphs, line breaks if useful, can reference @owners.
+- external_followup: if this is a positive moment worth sharing externally (win, milestone, referenceable customer), draft 1-2 sentences. If this is sensitive (complaint, refund, churn), use null.
+- No emojis. We use plain text only.
 
 Output JSON only.`;
 
-export function buildPitchPrompt(
-  lead: string,
-  triage: Triage,
-  discovery: Discovery,
-  scope: Scope,
-): ChatMessage[] {
+export function buildCommsPrompt(event: string): ChatMessage[] {
   return [
-    { role: "system", content: PITCH_SYSTEM },
-    {
-      role: "user",
-      content: `Lead:\n${lead}\n\nTriage:\n${JSON.stringify(triage)}\n\nDiscovery questions:\n${JSON.stringify(discovery)}\n\nProposed scope:\n${JSON.stringify(scope)}`,
-    },
+    { role: "system", content: COMMS_SYSTEM },
+    { role: "user", content: `Event:\n${event}` },
   ];
 }
 
-export async function runPitch(
+export async function runComms(
   ai: AiBinding,
   model: string,
-  lead: string,
-  triage: Triage,
-  discovery: Discovery,
-  scope: Scope,
-): Promise<Pitch> {
-  return runStage(
-    ai,
-    model,
-    buildPitchPrompt(lead, triage, discovery, scope),
-    Pitch,
-    "pitch",
-  );
+  event: string,
+): Promise<Comms> {
+  return runStage(ai, model, buildCommsPrompt(event), Comms, "comms");
 }

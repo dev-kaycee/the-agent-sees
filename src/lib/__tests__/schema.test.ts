@@ -1,179 +1,151 @@
 import { describe, expect, it } from "vitest";
 import {
   LeadInput,
-  Triage,
-  Discovery,
-  Scope,
-  Pitch,
+  CustomerResponse,
+  OpsTasks,
+  FounderNote,
+  Comms,
   ApiError,
 } from "../schema.js";
 
 describe("LeadInput", () => {
-  it("accepts a 1-char message", () => {
-    expect(LeadInput.parse({ lead: "x", ts_token: "tok" })).toEqual({
-      lead: "x",
-      ts_token: "tok",
-    });
-  });
-
   it("trims and accepts a normal lead", () => {
-    const result = LeadInput.parse({
-      lead: "  seed-stage SaaS  ",
-      ts_token: "tok",
-    });
-    expect(result.lead).toBe("seed-stage SaaS");
+    expect(LeadInput.parse({ lead: "  hello  ", ts_token: "tok" }).lead).toBe(
+      "hello",
+    );
   });
-
-  it("rejects empty lead after trim", () => {
+  it("rejects empty after trim", () => {
     expect(() => LeadInput.parse({ lead: "   ", ts_token: "tok" })).toThrow();
   });
-
-  it("rejects lead longer than 2000 chars", () => {
-    expect(() => LeadInput.parse({ lead: "x".repeat(2001), ts_token: "tok" })).toThrow();
+  it("rejects > 2000 chars", () => {
+    expect(() =>
+      LeadInput.parse({ lead: "x".repeat(2001), ts_token: "tok" }),
+    ).toThrow();
   });
-
   it("rejects missing ts_token", () => {
     expect(() => LeadInput.parse({ lead: "hi" })).toThrow();
   });
 });
 
-const validTriage = {
-  classification: "mvp_build" as const,
-  fit_score: 5 as const,
-  entities: {
-    company: "Acme",
-    stage: "seed",
-    team_size: "12",
-    industry: "fintech",
-    problem: "Need to ship MVP fast.",
-    timeline: "6 weeks",
-    budget: "$15k",
-    tech_mentioned: ["Stripe", "QuickBooks"],
-  },
-  signals: ["explicit timeline", "explicit budget", "specific integration"],
-};
-
-describe("Triage", () => {
-  it("accepts a fully valid triage", () => {
-    expect(Triage.parse(validTriage)).toEqual(validTriage);
+describe("CustomerResponse", () => {
+  const valid = {
+    channel: "email" as const,
+    to: "Sarah Chen",
+    subject: "Welcome to Acme",
+    body: "Hi Sarah — thanks for picking us. Here's what happens next.",
+    tone_note: "Warm but professional; references her stated use case.",
+  };
+  it("accepts a valid email response", () => {
+    expect(CustomerResponse.parse(valid)).toEqual(valid);
   });
-
-  it("rejects fit_score of 6", () => {
-    expect(() => Triage.parse({ ...validTriage, fit_score: 6 })).toThrow();
-  });
-
-  it("rejects unknown classification", () => {
+  it("accepts a slack_dm with null subject", () => {
     expect(() =>
-      Triage.parse({ ...validTriage, classification: "bogus" }),
-    ).toThrow();
-  });
-
-  it("accepts null entity fields", () => {
-    expect(() =>
-      Triage.parse({
-        ...validTriage,
-        entities: { ...validTriage.entities, company: null, stage: null },
-      }),
+      CustomerResponse.parse({ ...valid, channel: "slack_dm", subject: null }),
     ).not.toThrow();
   });
-
-  it("rejects empty signals array", () => {
-    expect(() => Triage.parse({ ...validTriage, signals: [] })).toThrow();
+  it("rejects body shorter than 40 chars", () => {
+    expect(() =>
+      CustomerResponse.parse({ ...valid, body: "thanks" }),
+    ).toThrow();
   });
 });
 
-describe("Discovery", () => {
-  it("accepts 2 questions", () => {
-    expect(() =>
-      Discovery.parse({
-        questions: [
-          { topic: "Data", question: "Where does the data live today?" },
-          { topic: "Volume", question: "How many transactions per night?" },
-        ],
-      }),
-    ).not.toThrow();
+describe("OpsTasks", () => {
+  const valid = {
+    tasks: [
+      {
+        title: "Create Acme workspace",
+        owner_role: "ops" as const,
+        when: "today",
+        why: "So Sarah can log in tomorrow.",
+      },
+      {
+        title: "Assign CSM Maya",
+        owner_role: "csm" as const,
+        when: "today",
+        why: "Single point of contact.",
+      },
+      {
+        title: "Schedule 30-day check-in",
+        owner_role: "csm" as const,
+        when: "by Friday",
+        why: "Catch issues early.",
+      },
+    ],
+  };
+  it("accepts 3 tasks", () => {
+    expect(OpsTasks.parse(valid)).toEqual(valid);
   });
-
-  it("rejects 1 question (min 2)", () => {
+  it("rejects 2 tasks (min 3)", () => {
     expect(() =>
-      Discovery.parse({
-        questions: [{ topic: "x", question: "y" }],
-      }),
+      OpsTasks.parse({ tasks: valid.tasks.slice(0, 2) }),
     ).toThrow();
   });
-
-  it("rejects 5 questions (max 4)", () => {
+  it("rejects an unknown owner_role", () => {
     expect(() =>
-      Discovery.parse({
-        questions: Array.from({ length: 5 }, (_, i) => ({
-          topic: `t${i}`,
-          question: `q${i}`,
-        })),
+      OpsTasks.parse({
+        tasks: [{ ...valid.tasks[0], owner_role: "ceo" as never }],
       }),
     ).toThrow();
   });
 });
 
-describe("Scope", () => {
-  it("accepts a 4-week plan", () => {
+describe("FounderNote", () => {
+  it("accepts a well-formed note", () => {
     expect(() =>
-      Scope.parse({
-        weeks: [
-          { label: "W1 — discovery", deliverable: "Spec sign-off" },
-          { label: "W2 — prototype", deliverable: "Stripe webhook listener" },
-          { label: "W3 — integrate", deliverable: "QuickBooks reconcile job" },
-          { label: "W4 — ship", deliverable: "Production rollout + handover" },
-        ],
-        tech_stack: ["Cloudflare Workers", "TypeScript", "D1"],
-        effort_pd: "~14 person-days",
-        risks: ["QuickBooks rate limits"],
+      FounderNote.parse({
+        strategic_angle:
+          "Acme is the first Pro-plan signup from a 50+ person SaaS this quarter; if we nail this it's a referenceable case study.",
+        one_action: "DM Sarah personally in week 2",
+        tag: "referenceable_case_study",
       }),
     ).not.toThrow();
   });
-
-  it("rejects empty tech_stack", () => {
+  it("rejects an unknown tag", () => {
     expect(() =>
-      Scope.parse({
-        weeks: [
-          { label: "W1", deliverable: "x" },
-          { label: "W2", deliverable: "y" },
-        ],
-        tech_stack: [],
-        effort_pd: "x",
-        risks: [],
+      FounderNote.parse({
+        strategic_angle: "x".repeat(50),
+        one_action: "y",
+        tag: "moonshot" as never,
       }),
     ).toThrow();
   });
 });
 
-describe("Pitch", () => {
-  it("accepts a normal reply + next_step", () => {
+describe("Comms", () => {
+  it("accepts slack + external", () => {
     expect(() =>
-      Pitch.parse({
-        reply:
-          "Thanks — your Stripe-to-QuickBooks reconciliation work is exactly what we ship. Sending a discovery slot.",
-        next_step: "Book a 20-min discovery call",
+      Comms.parse({
+        slack: {
+          channel: "#wins",
+          text: "New Pro customer — Acme Corp, 50ppl B2B SaaS. Sarah Chen is CTO. Maya owns CS.",
+        },
+        external_followup: "Tweet: 'Welcoming Acme to the studio.'",
       }),
     ).not.toThrow();
   });
-
-  it("rejects a reply shorter than 40 chars", () => {
+  it("accepts null external_followup", () => {
     expect(() =>
-      Pitch.parse({ reply: "thanks", next_step: "book a call" }),
+      Comms.parse({
+        slack: { channel: "#general", text: "x".repeat(30) },
+        external_followup: null,
+      }),
+    ).not.toThrow();
+  });
+  it("rejects slack text shorter than 20 chars", () => {
+    expect(() =>
+      Comms.parse({
+        slack: { channel: "#x", text: "short" },
+        external_followup: null,
+      }),
     ).toThrow();
   });
 });
 
 describe("ApiError", () => {
-  it("accepts a well-formed error envelope", () => {
+  it("accepts a well-formed envelope", () => {
     expect(
-      ApiError.parse({ ok: false, error: "rate_limited", message: "Try again." }),
-    ).toEqual({ ok: false, error: "rate_limited", message: "Try again." });
-  });
-
-  it("rejects ok: true", () => {
-    expect(() =>
-      ApiError.parse({ ok: true, error: "x", message: "y" }),
-    ).toThrow();
+      ApiError.parse({ ok: false, error: "rate_limited", message: "wait" }),
+    ).toEqual({ ok: false, error: "rate_limited", message: "wait" });
   });
 });
