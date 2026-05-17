@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
+import { useEffect, useRef, useState } from "preact/hooks";
 
 interface Result {
   classification: string;
@@ -30,11 +30,14 @@ declare global {
           "expired-callback"?: () => void;
           appearance?: "always" | "execute" | "interaction-only";
           execution?: "render" | "execute";
+          theme?: "light" | "dark" | "auto";
         },
       ): string;
       execute(widgetId: string): void;
       reset(widgetId: string): void;
+      getResponse(widgetId: string): string | undefined;
     };
+    onTurnstileLoad?: () => void;
   }
 }
 
@@ -44,70 +47,85 @@ const EXAMPLE_LEAD =
 export default function LeadQualifier({ turnstileSiteKey }: Props) {
   const [lead, setLead] = useState("");
   const [status, setStatus] = useState<Status>({ state: "idle" });
+  const [tsReady, setTsReady] = useState(false);
   const widgetRef = useRef<HTMLDivElement>(null);
   const widgetIdRef = useRef<string | null>(null);
-  const tokenResolverRef = useRef<((token: string) => void) | null>(null);
+  const tokenRef = useRef<string>("");
 
-  // Inject the Turnstile script + render an invisible widget once.
+  // Load Turnstile, render widget on mount, auto-execute, cache token.
   useEffect(() => {
-    if (document.querySelector("script[data-turnstile]")) return;
+    const renderWidget = () => {
+      if (!window.turnstile || !widgetRef.current || widgetIdRef.current) return;
+      widgetIdRef.current = window.turnstile.render(widgetRef.current, {
+        sitekey: turnstileSiteKey,
+        appearance: "interaction-only",
+        execution: "render", // auto-execute on render — token cached and ready by the time user clicks
+        theme: "light",
+        callback: (token) => {
+          tokenRef.current = token;
+          setTsReady(true);
+        },
+        "error-callback": () => {
+          tokenRef.current = "";
+          setTsReady(false);
+        },
+        "expired-callback": () => {
+          tokenRef.current = "";
+          setTsReady(false);
+          if (widgetIdRef.current && window.turnstile) {
+            window.turnstile.reset(widgetIdRef.current);
+          }
+        },
+      });
+    };
 
+    if (window.turnstile) {
+      renderWidget();
+      return;
+    }
+
+    if (document.querySelector("script[data-turnstile]")) {
+      // Script tag exists but hasn't fired yet — poll briefly.
+      const interval = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(interval);
+          renderWidget();
+        }
+      }, 100);
+      return () => clearInterval(interval);
+    }
+
+    window.onTurnstileLoad = renderWidget;
     const script = document.createElement("script");
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+    script.src =
+      "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad";
     script.async = true;
     script.defer = true;
     script.dataset.turnstile = "true";
     document.head.appendChild(script);
-
-    script.addEventListener("load", () => {
-      if (!window.turnstile || !widgetRef.current) return;
-      widgetIdRef.current = window.turnstile.render(widgetRef.current, {
-        sitekey: turnstileSiteKey,
-        appearance: "interaction-only",
-        execution: "execute",
-        callback: (token) => {
-          tokenResolverRef.current?.(token);
-          tokenResolverRef.current = null;
-        },
-        "error-callback": () => {
-          tokenResolverRef.current?.("");
-          tokenResolverRef.current = null;
-        },
-        "expired-callback": () => {
-          tokenResolverRef.current?.("");
-          tokenResolverRef.current = null;
-        },
-      });
-    });
   }, [turnstileSiteKey]);
-
-  const getToken = useCallback((): Promise<string> => {
-    return new Promise((resolve) => {
-      tokenResolverRef.current = resolve;
-      if (widgetIdRef.current && window.turnstile) {
-        window.turnstile.execute(widgetIdRef.current);
-      } else {
-        // Fall back: dev / Turnstile not loaded.
-        resolve("");
-      }
-    });
-  }, []);
 
   const onSubmit = async (e: Event) => {
     e.preventDefault();
     const trimmed = lead.trim();
     if (!trimmed) return;
-    setStatus({ state: "submitting" });
 
-    let token = "";
-    try {
-      token = await Promise.race([
-        getToken(),
-        new Promise<string>((resolve) => setTimeout(() => resolve(""), 5000)),
-      ]);
-    } catch {
-      token = "";
+    // Re-read the current token (Turnstile may have refreshed it).
+    let token = tokenRef.current;
+    if (!token && widgetIdRef.current && window.turnstile) {
+      token = window.turnstile.getResponse(widgetIdRef.current) ?? "";
     }
+
+    if (!token) {
+      setStatus({
+        state: "error",
+        message:
+          "Security check isn't ready yet — wait a second and try again. If it keeps failing, refresh the page.",
+      });
+      return;
+    }
+
+    setStatus({ state: "submitting" });
 
     try {
       const res = await fetch("/api/agents/lead-qualifier", {
@@ -116,7 +134,14 @@ export default function LeadQualifier({ turnstileSiteKey }: Props) {
         body: JSON.stringify({ lead: trimmed, ts_token: token }),
       });
       const json = (await res.json()) as
-        | { ok: true; classification: string; priority: 1 | 3 | 5; reasoning: string; suggested_action: string; draft_reply: string }
+        | {
+            ok: true;
+            classification: string;
+            priority: 1 | 3 | 5;
+            reasoning: string;
+            suggested_action: string;
+            draft_reply: string;
+          }
         | { ok: false; error: string; message: string };
 
       if (!json.ok) {
@@ -133,13 +158,16 @@ export default function LeadQualifier({ turnstileSiteKey }: Props) {
           },
         });
       }
-    } catch (e) {
+    } catch {
       setStatus({
         state: "error",
         message: "Network error — refresh and try again, or email hello@theagentsees.com directly.",
       });
     }
 
+    // Reset Turnstile for the next submission (token is single-use server-side).
+    tokenRef.current = "";
+    setTsReady(false);
     if (widgetIdRef.current && window.turnstile) {
       window.turnstile.reset(widgetIdRef.current);
     }
@@ -149,6 +177,9 @@ export default function LeadQualifier({ turnstileSiteKey }: Props) {
     setLead("");
     setStatus({ state: "idle" });
   };
+
+  const submitDisabled =
+    status.state === "submitting" || !lead.trim() || !tsReady;
 
   return (
     <div class="lq">
@@ -174,12 +205,12 @@ export default function LeadQualifier({ turnstileSiteKey }: Props) {
                 Try another
               </button>
             )}
-            <button
-              type="submit"
-              class="lq__btn"
-              disabled={status.state === "submitting" || !lead.trim()}
-            >
-              {status.state === "submitting" ? "Thinking…" : "Run the agent"}
+            <button type="submit" class="lq__btn" disabled={submitDisabled}>
+              {status.state === "submitting"
+                ? "Thinking…"
+                : !tsReady
+                ? "Preparing…"
+                : "Run the agent"}
             </button>
           </div>
         </div>
@@ -188,14 +219,12 @@ export default function LeadQualifier({ turnstileSiteKey }: Props) {
 
       <div class="lq__output" aria-live="polite">
         {status.state === "idle" && (
-          <p class="lq__hint">Output will appear here. The agent runs on a free-tier model — expect a couple of seconds.</p>
+          <p class="lq__hint">
+            Output will appear here. The agent runs on a free-tier model — expect a couple of seconds.
+          </p>
         )}
-        {status.state === "submitting" && (
-          <p class="lq__hint">Running the model…</p>
-        )}
-        {status.state === "error" && (
-          <p class="lq__error">{status.message}</p>
-        )}
+        {status.state === "submitting" && <p class="lq__hint">Running the model…</p>}
+        {status.state === "error" && <p class="lq__error">{status.message}</p>}
         {status.state === "done" && (
           <dl class="lq__fields">
             <div class="lq__field">
