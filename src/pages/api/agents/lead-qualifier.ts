@@ -44,13 +44,24 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   }
 
   // 2. Verify Turnstile
-  const turnstileOk = await verifyTurnstile(
+  const turnstile = await verifyTurnstile(
     parsed.ts_token,
     env.TURNSTILE_SECRET_KEY,
     clientAddress,
   );
-  if (!turnstileOk) {
-    return jsonError(403, "turnstile_failed", "Turnstile check failed. Refresh and try again.");
+  if (!turnstile.success) {
+    console.warn("turnstile rejected", {
+      codes: turnstile.errorCodes,
+      ip: clientAddress,
+      tokenPrefix: parsed.ts_token.slice(0, 12),
+      tokenLen: parsed.ts_token.length,
+    });
+    const codeSummary = turnstile.errorCodes.length > 0 ? turnstile.errorCodes.join(", ") : "no code";
+    return jsonError(
+      403,
+      "turnstile_failed",
+      `Turnstile check failed (${codeSummary}). Refresh and try again.`,
+    );
   }
 
   // 3. Rate limit (per IP)
