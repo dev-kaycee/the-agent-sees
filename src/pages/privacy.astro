@@ -8,36 +8,37 @@ import Rule from "../components/ui/Rule.astro";
 const updated = "2026-05-17";
 ---
 <Base title="Privacy — The Agent Sees" metaMiddle="LEGAL · PRIVACY" metaRight={`UPDATED ${updated}`}>
-  <Section label="Privacy Policy">
-    <h1 style="font-size: var(--text-3xl); margin-bottom: 1.5rem; max-width: 28rem;">How we handle your data.</h1>
-    <p style="font-size: var(--text-base); color: var(--color-mute); max-width: 38rem; margin-bottom: 2rem;">
-      Plain English. Last updated {updated}.
-    </p>
-    <Rule weight="hairline" />
-  </Section>
+  <Section label="Privacy Policy" density="compact">
+    <div style="max-width: 64rem; display: grid; grid-template-columns: 1fr; gap: 3rem;" class="md:grid-cols-[1fr_2fr] md:gap-12">
+      <header>
+        <h1 style="font-size: var(--text-2xl); line-height: 1.05; margin-bottom: 1.25rem;">How we handle your data.</h1>
+        <p style="font-size: var(--text-sm); color: var(--color-mute);">Plain English. Last updated {updated}.</p>
+      </header>
 
-  <Section>
-    <article style="max-width: 42rem; display: flex; flex-direction: column; gap: 1.5rem; font-size: var(--text-base); line-height: 1.65;">
-      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">What we collect</h2>
-      <p>When you submit our contact form, we collect: your name, email, optional company, your message, and the timeline/budget bands you select. We also store a salted hash of your IP and your user agent for abuse detection — never the raw IP.</p>
+      <article style="display: flex; flex-direction: column; gap: 1.25rem; font-size: var(--text-base); line-height: 1.65; max-width: 38rem;">
+        <Rule weight="hairline" />
 
-      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Why we collect it</h2>
-      <p>So we can reply to your enquiry. That's the only purpose.</p>
+        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">What we collect</h2>
+        <p>When you submit our contact form, we collect: your name, email, optional company, your message, and the timeline/budget bands you select. We also store a salted hash of your IP and your user agent for abuse detection — never the raw IP.</p>
 
-      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Where it goes</h2>
-      <p>Form submissions are stored in our Cloudflare D1 database and emailed to <a href="mailto:hello@theagentsees.com" style="text-decoration: underline;">hello@theagentsees.com</a> via Resend. Both services are sub-processors. Submissions are purged after 12 months.</p>
+        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Why we collect it</h2>
+        <p>So we can reply to your enquiry. That's the only purpose.</p>
 
-      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">The live demo on /work</h2>
-      <p>The Lead Qualifier demo runs on Cloudflare Workers AI. The text you submit is processed by the model and not stored. Cloudflare may retain anonymised inference logs per their privacy policy.</p>
+        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Where it goes</h2>
+        <p>Form submissions are stored in our Cloudflare D1 database and emailed to <a href="mailto:hello@theagentsees.com" style="text-decoration: underline;">hello@theagentsees.com</a> via Resend. Both services are sub-processors. Submissions are purged after 12 months.</p>
 
-      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Analytics</h2>
-      <p>We use Cloudflare Web Analytics, which is cookieless and does not track you across sites. No personally identifying information is collected.</p>
+        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">The live demo on /work</h2>
+        <p>The Lead Qualifier demo runs on Cloudflare Workers AI. The text you submit is processed by the model and not stored. Cloudflare may retain anonymised inference logs per their privacy policy.</p>
 
-      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Your rights</h2>
-      <p>Email <a href="mailto:hello@theagentsees.com" style="text-decoration: underline;">hello@theagentsees.com</a> to access, correct, or delete any data we hold about you. We will respond within 30 days.</p>
+        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Analytics</h2>
+        <p>We use Cloudflare Web Analytics, which is cookieless and does not track you across sites. No personally identifying information is collected.</p>
 
-      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Changes</h2>
-      <p>If this policy changes materially, the "updated" date at the top of the page will change and the diff will be visible in our public repo.</p>
-    </article>
+        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Your rights</h2>
+        <p>Email <a href="mailto:hello@theagentsees.com" style="text-decoration: underline;">hello@theagentsees.com</a> to access, correct, or delete any data we hold about you. We will respond within 30 days.</p>
+
+        <h2 style="font-size: var(--text-lg); margin-top: 0.5rem;">Changes</h2>
+        <p>If this policy changes materially, the "updated" date at the top of the page will change and the diff will be visible in our public repo.</p>
+      </article>
+    </div>
   </Section>
 </Base>

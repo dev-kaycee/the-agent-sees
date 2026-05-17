@@ -4,13 +4,18 @@ interface Props {
   id?: string;
   /** "default" (white) | "alt" (paper-2) */
   tone?: "default" | "alt";
+  /** "compact" trims vertical padding (good for legal / dense pages) */
+  density?: "default" | "compact";
 }
-const { label, id, tone = "default" } = Astro.props;
+const { label, id, tone = "default", density = "default" } = Astro.props;
 const bg = tone === "alt" ? "var(--color-paper-2)" : "var(--color-paper)";
+const pad = density === "compact"
+  ? "py-[1.5rem] md:py-[2.5rem] lg:py-[3.5rem]"
+  : "py-[2rem] md:py-[3.5rem] lg:py-[5rem]";
 ---
 <section
   id={id}
-  class="px-[var(--spacing-gutter-sm)] md:px-[var(--spacing-gutter-md)] lg:px-[var(--spacing-gutter-lg)] py-[3rem] md:py-[5rem] lg:py-[7rem]"
+  class={`px-[var(--spacing-gutter-sm)] md:px-[var(--spacing-gutter-md)] lg:px-[var(--spacing-gutter-lg)] ${pad}`}
   style={`background: ${bg};`}
 >
   {label && <p class="label mb-6">{label}</p>}
