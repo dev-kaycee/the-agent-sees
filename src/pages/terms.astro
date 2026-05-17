@@ -1,0 +1,40 @@
+---
+export const prerender = true;
+
+import Base from "../components/layout/Base.astro";
+import Section from "../components/ui/Section.astro";
+import Rule from "../components/ui/Rule.astro";
+
+const updated = "2026-05-17";
+---
+<Base title="Terms — The Agent Sees" metaMiddle="LEGAL · TERMS" metaRight={`UPDATED ${updated}`}>
+  <Section label="Terms of Use">
+    <h1 style="font-size: var(--text-3xl); margin-bottom: 1.5rem; max-width: 28rem;">The rules of the road.</h1>
+    <p style="font-size: var(--text-base); color: var(--color-mute); max-width: 38rem; margin-bottom: 2rem;">
+      The terms that govern your use of this site. Last updated {updated}.
+    </p>
+    <Rule weight="hairline" />
+  </Section>
+
+  <Section>
+    <article style="max-width: 42rem; display: flex; flex-direction: column; gap: 1.5rem; font-size: var(--text-base); line-height: 1.65;">
+      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Use of this site</h2>
+      <p>You may use this site to learn about our studio and contact us. You may not scrape, abuse, reverse-engineer, or attempt to interfere with the demo agent or contact form. Rate limits exist and are enforced.</p>
+
+      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">The live demo</h2>
+      <p>The Lead Qualifier demo on /work is provided for illustration. Outputs are produced by a free-tier language model and are not professional advice. Don't paste confidential information into the demo — we don't store it, but the inference provider has its own policies.</p>
+
+      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Engagement terms</h2>
+      <p>This site does not constitute a contract. Any engagement with The Agent Sees is governed by a separate Statement of Work signed between you and us.</p>
+
+      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Intellectual property</h2>
+      <p>The brand, copy, design system, and code on this site are owned by The Agent Sees. The legacy archived HTML retains its prior ownership.</p>
+
+      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Liability</h2>
+      <p>This site is provided "as is" without warranty. We're not liable for any loss arising from your use of the site or the demo.</p>
+
+      <h2 style="font-size: var(--text-xl); margin-top: 1rem;">Contact</h2>
+      <p>Questions about these terms: <a href="mailto:hello@theagentsees.com" style="text-decoration: underline;">hello@theagentsees.com</a>.</p>
+    </article>
+  </Section>
+</Base>
