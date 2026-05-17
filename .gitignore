@@ -7,3 +7,13 @@
 
 # brainstorming session artifacts
 .superpowers/
+
+# build artifacts
+dist/
+.astro/
+node_modules/
+
+# editor
+.DS_Store
+.vscode/
+.idea/
