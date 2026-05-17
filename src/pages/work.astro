@@ -4,6 +4,7 @@ export const prerender = true;
 import Base from "../components/layout/Base.astro";
 import Section from "../components/ui/Section.astro";
 import Rule from "../components/ui/Rule.astro";
+import LeadQualifier from "../components/islands/LeadQualifier.tsx";
 
 const builds = [
   {
@@ -25,6 +26,8 @@ const nextUp = [
   "Lead Qualifier on Workers AI with streaming",
   "First real client engagement — write-up to follow",
 ];
+
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? "1x00000000000000000000AA";
 ---
 <Base title="Work — The Agent Sees" metaMiddle="WORK · DEMOS" metaRight="2026 →">
   <!-- HEADER -->
@@ -44,35 +47,16 @@ const nextUp = [
   <Section label="Live demo · Lead Qualifier" id="demo">
     <div class="demo-shell">
       <div class="demo-shell__copy">
-        <h2 class="demo-shell__head">Coming next — wired in Plan 4.</h2>
+        <h2 class="demo-shell__head">Try the agent.</h2>
         <p class="demo-shell__body">
-          Paste a hypothetical lead (a sentence is fine). The agent will classify it, score priority, suggest a next action, and draft a 2-sentence reply — streaming, in your browser, in roughly a second.
+          Paste a hypothetical lead — a sentence is fine. The agent classifies it, scores priority, suggests a next action, and drafts a 2-sentence reply.
         </p>
         <p class="demo-shell__body">
-          Running on Cloudflare Workers AI (Llama 3.1 8B), rate-limited, Turnstile-gated, free for you to use. The exact same plumbing is what we'd build inside your CRM.
+          Running on Cloudflare Workers AI (Llama 3.1 8B). Rate-limited to 5 requests/minute per IP and 1000/day total. Free for you to use.
         </p>
       </div>
-      <div class="demo-shell__preview" aria-hidden="true">
-        <div class="demo-shell__field">
-          <span class="demo-shell__field-label">input</span>
-          <span class="demo-shell__field-val">[ paste a lead here ]</span>
-        </div>
-        <div class="demo-shell__field">
-          <span class="demo-shell__field-label">classification</span>
-          <span class="demo-shell__field-val demo-shell__field-val--dim">— pending —</span>
-        </div>
-        <div class="demo-shell__field">
-          <span class="demo-shell__field-label">priority</span>
-          <span class="demo-shell__field-val demo-shell__field-val--dim">— pending —</span>
-        </div>
-        <div class="demo-shell__field">
-          <span class="demo-shell__field-label">suggested action</span>
-          <span class="demo-shell__field-val demo-shell__field-val--dim">— pending —</span>
-        </div>
-        <div class="demo-shell__field demo-shell__field--multi">
-          <span class="demo-shell__field-label">draft reply</span>
-          <span class="demo-shell__field-val demo-shell__field-val--dim">— pending —</span>
-        </div>
+      <div class="demo-shell__island">
+        <LeadQualifier client:visible turnstileSiteKey={turnstileSiteKey} />
       </div>
     </div>
   </Section>
@@ -164,33 +148,6 @@ const nextUp = [
     margin-bottom: 1.25rem;
     max-width: 36rem;
   }
-  .demo-shell__preview {
-    background: var(--color-paper);
-    border: 1px solid var(--color-ink);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    font-family: var(--font-mono);
-  }
-  .demo-shell__field {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    font-size: var(--text-sm);
-    padding: 0.6rem 0;
-    border-bottom: 1px solid var(--color-hairline);
-  }
-  .demo-shell__field--multi { flex-direction: column; gap: 0.4rem; border-bottom: 0; }
-  .demo-shell__field-label {
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-label);
-    text-transform: uppercase;
-    color: var(--color-mute);
-  }
-  .demo-shell__field-val { font-weight: 500; }
-  .demo-shell__field-val--dim { color: var(--color-mute); font-weight: 400; }
-
   /* BUILDS */
   .builds {
     display: grid;
@@ -269,5 +226,139 @@ const nextUp = [
     text-decoration: underline;
     text-underline-offset: 3px;
     color: var(--color-ink);
+  }
+
+  /* DEMO ISLAND host */
+  .demo-shell__island {
+    background: var(--color-paper);
+    border: 1px solid var(--color-ink);
+    padding: 1.5rem;
+  }
+
+  /* LeadQualifier internal styles — scoped via :global() */
+  :global(.lq) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    font-family: var(--font-sans);
+  }
+  :global(.lq__form) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  :global(.lq__label) {
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+  }
+  :global(.lq__textarea) {
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: 1.5;
+    padding: 0.75rem;
+    border: 1px solid var(--color-ink);
+    background: var(--color-paper);
+    color: var(--color-ink);
+    resize: vertical;
+    min-height: 6rem;
+  }
+  :global(.lq__textarea:focus-visible) {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+  :global(.lq__row) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+  :global(.lq__count) {
+    color: var(--color-mute);
+  }
+  :global(.lq__actions) {
+    display: flex;
+    gap: 0.5rem;
+  }
+  :global(.lq__btn) {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    padding: 0.5rem 1rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    border: 0;
+    cursor: pointer;
+    font-family: var(--font-sans);
+  }
+  :global(.lq__btn:hover:not(:disabled)) {
+    background: var(--color-mute);
+  }
+  :global(.lq__btn:disabled) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  :global(.lq__btn--ghost) {
+    background: transparent;
+    color: var(--color-ink);
+    border: 1px solid var(--color-ink);
+  }
+  :global(.lq__btn--ghost:hover) {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+  :global(.lq__turnstile) {
+    min-height: 0;
+  }
+  :global(.lq__output) {
+    border-top: 1px solid var(--color-hairline);
+    padding-top: 1rem;
+    min-height: 6rem;
+  }
+  :global(.lq__hint),
+  :global(.lq__error) {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-mute);
+  }
+  :global(.lq__error) {
+    color: var(--color-ink);
+  }
+  :global(.lq__fields) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+  }
+  :global(.lq__field) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  :global(.lq__field:last-child) {
+    border-bottom: 0;
+  }
+  :global(.lq__field dt) {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+    margin: 0;
+  }
+  :global(.lq__field dd) {
+    margin: 0;
+    font-size: var(--text-sm);
+    line-height: 1.55;
+  }
+  :global(.lq__disclaimer) {
+    font-size: var(--text-xs);
+    color: var(--color-mute);
+    line-height: 1.5;
+    max-width: 38rem;
   }
 </style>
