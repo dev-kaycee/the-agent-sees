@@ -1,0 +1,58 @@
+---
+import "../../styles/global.css";
+import TopBar from "./TopBar.astro";
+import MetaStrip from "./MetaStrip.astro";
+import Nav from "./Nav.astro";
+import Footer from "./Footer.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** override the middle meta strip text */
+  metaMiddle?: string;
+  /** override the right meta strip text */
+  metaRight?: string;
+}
+
+const {
+  title,
+  description = "We build AI-powered MVPs, web apps, and the agents that run inside them.",
+  metaMiddle,
+  metaRight,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://theagentsees.com").toString();
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <title>{title}</title>
+
+    <!-- preload critical fonts -->
+    <link rel="preload" href="/fonts/InterDisplay-ExtraBold.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin />
+  </head>
+  <body>
+    <TopBar />
+    <MetaStrip middle={metaMiddle} right={metaRight} />
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
