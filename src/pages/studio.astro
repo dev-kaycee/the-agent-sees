@@ -1,0 +1,301 @@
+---
+export const prerender = true;
+
+import Base from "../components/layout/Base.astro";
+import Section from "../components/ui/Section.astro";
+import Rule from "../components/ui/Rule.astro";
+
+const principles = [
+  {
+    num: "01",
+    head: "Ship the thing.",
+    body: "Software that exists beats software that's perfect on a whiteboard. We work in 1–2 week cycles with real URLs and real users in the loop. Plans are scaffolding, not certainty.",
+  },
+  {
+    num: "02",
+    head: "Type at the edge.",
+    body: "We write typed contracts at every system boundary — request payloads, agent outputs, database schemas. Bugs caught at compile time are bugs your customers never see.",
+  },
+  {
+    num: "03",
+    head: "Software with a point of view.",
+    body: "We make calls; you ratify them. You hired a studio, not a Jira board. We bring a clear opinion to every decision, document why, and stay open to being wrong.",
+  },
+];
+
+const process = [
+  {
+    num: "01",
+    head: "Discovery",
+    body: "Half a day on a call. We dig into the business, the user, the constraint. We write down what we heard and send it back. No code yet.",
+  },
+  {
+    num: "02",
+    head: "Spec",
+    body: "A short written spec — what we're building, what we're not, what success looks like. You sign off. If the spec is wrong, this is where we discover it — cheap.",
+  },
+  {
+    num: "03",
+    head: "Build",
+    body: "Ship to a real URL within the first week. Weekly demos, async updates in between. You see every screen as it lands; we course-correct on real feedback, not assumptions.",
+  },
+  {
+    num: "04",
+    head: "Ship",
+    body: "Production-grade, monitored, with a clean handover. We don't disappear — we stay on retainer or pass the keys cleanly. Either way, your team owns the code.",
+  },
+];
+---
+<Base title="Studio — The Agent Sees" metaMiddle="STUDIO · ABOUT" metaRight="2026 →">
+  <!-- HEADER -->
+  <section class="studio-hero">
+    <div class="studio-hero__inner">
+      <p class="label">Studio</p>
+      <h1 class="studio-hero__head">What we believe.<br />How we work.</h1>
+      <p class="studio-hero__sub">
+        The Agent Sees is a new studio, started in 2026 to build AI-powered MVPs and the agents that run inside them. This page is the bit that doesn't fit on a homepage.
+      </p>
+    </div>
+  </section>
+
+  <Rule weight="ink" />
+
+  <!-- PRINCIPLES -->
+  <Section label="Principles">
+    <div class="principles">
+      {principles.map((p) => (
+        <article class="principle">
+          <span class="principle__num">{p.num}</span>
+          <h2 class="principle__head">{p.head}</h2>
+          <p class="principle__body">{p.body}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Rule weight="ink" />
+
+  <!-- PROCESS DETAIL -->
+  <Section label="Process" tone="alt">
+    <div class="process-detail">
+      {process.map((p) => (
+        <article class="process-detail__step">
+          <span class="process-detail__num">{p.num}</span>
+          <h3 class="process-detail__head">{p.head}</h3>
+          <p class="process-detail__body">{p.body}</p>
+        </article>
+      ))}
+    </div>
+  </Section>
+
+  <Rule weight="ink" />
+
+  <!-- FOUNDER NOTE (placeholder until founder fills it in) -->
+  <!-- TODO:founder-bio — replace name/title/portrait/body before launch -->
+  <Section label="Founder note">
+    <div class="founder">
+      <div class="founder__portrait" aria-hidden="true">
+        <div class="founder__portrait-placeholder">
+          <span>TAS</span>
+        </div>
+      </div>
+      <div class="founder__copy">
+        <p class="founder__name">[Founder name] — founder &amp; engineer</p>
+        <p class="founder__body">
+          [Placeholder — replace before launch. One paragraph, first person. Why I started The Agent Sees, what I've built before, what I care about. Honest, not hyped. End with an invitation to talk.]
+        </p>
+        <p class="founder__sign-off">— [Founder name], 2026</p>
+      </div>
+    </div>
+  </Section>
+
+  <Rule weight="ink" />
+
+  <!-- CONTACT STRIP -->
+  <Section tone="default">
+    <div class="contact-strip">
+      <h2 class="contact-strip__head">Tell us what you're building.</h2>
+      <div class="contact-strip__row">
+        <a href="mailto:hello@theagentsees.com" class="contact-strip__email">hello@theagentsees.com</a>
+        <a href="/contact" class="contact-strip__btn">Start a project →</a>
+      </div>
+    </div>
+  </Section>
+</Base>
+
+<style>
+  .studio-hero {
+    padding-inline: var(--spacing-gutter-sm);
+    padding-block: 2.5rem;
+  }
+  @media (min-width: 48rem) { .studio-hero { padding-inline: var(--spacing-gutter-md); padding-block: 3.5rem; } }
+  @media (min-width: 64rem) { .studio-hero { padding-inline: var(--spacing-gutter-lg); padding-block: 5rem; } }
+  .studio-hero__inner { max-width: 78rem; margin-inline: auto; }
+  .studio-hero__head {
+    font-size: var(--text-3xl);
+    line-height: 1.0;
+    margin: 1rem 0 1.5rem;
+  }
+  @media (min-width: 48rem) { .studio-hero__head { font-size: var(--text-4xl); } }
+  @media (min-width: 64rem) { .studio-hero__head { font-size: var(--text-5xl); } }
+  .studio-hero__sub {
+    font-size: var(--text-base);
+    color: var(--color-mute);
+    max-width: 36rem;
+    line-height: 1.6;
+  }
+
+  /* PRINCIPLES */
+  .principles {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3rem;
+    max-width: 88rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 64rem) {
+    .principles { grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 3rem; }
+  }
+  .principle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-ink);
+  }
+  .principle__num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-mute);
+  }
+  .principle__head {
+    font-size: var(--text-2xl);
+    line-height: 1.02;
+  }
+  .principle__body {
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-ink);
+  }
+
+  /* PROCESS DETAIL */
+  .process-detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    max-width: 88rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 48rem) {
+    .process-detail { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; }
+  }
+  .process-detail__step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-ink);
+  }
+  .process-detail__num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    color: var(--color-mute);
+  }
+  .process-detail__head {
+    font-size: var(--text-xl);
+    line-height: 1.05;
+  }
+  .process-detail__body {
+    font-size: var(--text-base);
+    line-height: 1.6;
+    color: var(--color-mute);
+    max-width: 30rem;
+  }
+
+  /* FOUNDER */
+  .founder {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+  @media (min-width: 48rem) {
+    .founder { grid-template-columns: 14rem 1fr; column-gap: 3rem; align-items: start; }
+  }
+  .founder__portrait {
+    aspect-ratio: 4 / 5;
+    background: var(--color-paper-2);
+    border: 1px solid var(--color-ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .founder__portrait-placeholder {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    font-weight: 800;
+    color: var(--color-mute);
+    letter-spacing: -0.04em;
+  }
+  .founder__name {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--color-mute);
+    margin-bottom: 1rem;
+  }
+  .founder__body {
+    font-size: var(--text-lg);
+    line-height: 1.55;
+    margin-bottom: 1.5rem;
+    max-width: 40rem;
+  }
+  .founder__sign-off {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-mute);
+  }
+
+  /* CONTACT STRIP — same as Home */
+  .contact-strip {
+    max-width: 88rem;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  @media (min-width: 64rem) {
+    .contact-strip { flex-direction: row; align-items: center; justify-content: space-between; gap: 3rem; }
+  }
+  .contact-strip__head {
+    font-size: var(--text-2xl);
+    line-height: 1.02;
+    max-width: 26rem;
+  }
+  @media (min-width: 64rem) { .contact-strip__head { font-size: var(--text-3xl); } }
+  .contact-strip__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .contact-strip__email {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .contact-strip__btn {
+    background: var(--color-ink);
+    color: var(--color-paper);
+    padding: 0.75rem 1.25rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .contact-strip__btn:hover { background: var(--color-mute); }
+</style>
