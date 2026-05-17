@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://theagentsees.com/sitemap.xml
+Sitemap: https://theagentsees.com/sitemap-index.xml
