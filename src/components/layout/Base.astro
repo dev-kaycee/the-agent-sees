@@ -50,6 +50,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://theagentsee
     <link rel="preload" href="/fonts/Inter-Regular.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
+    <div class="spotlight" aria-hidden="true"></div>
     <TopBar />
     <MetaStrip middle={metaMiddle} right={metaRight} />
     <Nav />
@@ -57,5 +58,82 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://theagentsee
       <slot />
     </main>
     <Footer />
+
+    <script is:inline>
+      // Cursor spotlight + magnetic-tilt on .magnetic elements
+      (function () {
+        if (window.__interactInit) return;
+        window.__interactInit = true;
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        const spot = document.querySelector(".spotlight");
+        if (spot && !reduce) {
+          let raf = 0;
+          let cx = 0, cy = 0;
+          window.addEventListener("mousemove", (e) => {
+            cx = e.clientX;
+            cy = e.clientY;
+            if (!raf) {
+              raf = requestAnimationFrame(() => {
+                raf = 0;
+                spot.style.setProperty("--cx", cx + "px");
+                spot.style.setProperty("--cy", cy + "px");
+                spot.style.opacity = "1";
+              });
+            }
+          }, { passive: true });
+          window.addEventListener("mouseleave", () => {
+            spot.style.opacity = "0";
+          });
+        }
+
+        // Magnetic tilt on .magnetic elements
+        function tiltOn(el) {
+          if (reduce) return;
+          let rafId = 0;
+          let tx = 0, ty = 0;
+          const onMove = (e) => {
+            const r = el.getBoundingClientRect();
+            const px = (e.clientX - r.left) / r.width;
+            const py = (e.clientY - r.top) / r.height;
+            tx = (py - 0.5) * -10;
+            ty = (px - 0.5) * 10;
+            if (!rafId) {
+              rafId = requestAnimationFrame(() => {
+                rafId = 0;
+                el.style.transform = `perspective(700px) rotateX(${tx}deg) rotateY(${ty}deg) translateY(-3px)`;
+              });
+            }
+          };
+          const onLeave = () => {
+            el.style.transform = "";
+          };
+          el.addEventListener("mousemove", onMove);
+          el.addEventListener("mouseleave", onLeave);
+        }
+        document.querySelectorAll(".magnetic").forEach(tiltOn);
+      })();
+    </script>
+
+    <style is:global>
+      .spotlight {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+        opacity: 0;
+        transition: opacity 320ms ease;
+        background: radial-gradient(
+          480px circle at var(--cx, 50%) var(--cy, 50%),
+          rgba(212, 165, 91, 0.08),
+          transparent 60%
+        );
+        mix-blend-mode: screen;
+      }
+      .magnetic {
+        will-change: transform;
+        transition: transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+    </style>
   </body>
 </html>

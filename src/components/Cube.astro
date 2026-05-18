@@ -1,12 +1,14 @@
 ---
 /**
- * The Cube — brand centerpiece. 6-face CSS-3D crystal cube; front face shows
- * the four specialist agents as quadrants, each tinted by its role accent.
- * Slowly floats. Respects prefers-reduced-motion.
+ * The Cube — interactive crystal centerpiece.
+ * - Ambient slow float
+ * - Mouse parallax: cube tilts toward cursor
+ * - Drag (or touch) to rotate freely; releases back to ambient
+ * - Respects prefers-reduced-motion
  */
 ---
-<div class="cube-stage" aria-hidden="true">
-  <div class="cube">
+<div class="cube-stage" id="cube-stage" aria-hidden="true">
+  <div class="cube" id="cube">
     <div class="face face--front">
       <div class="quad quad--cs">
         <div class="quad__icon">
@@ -52,7 +54,145 @@
     <div class="face face--bottom"></div>
   </div>
   <div class="cube-glow"></div>
+  <div class="cube-hint" id="cubeHint">drag to rotate</div>
 </div>
+
+<script>
+  type CubeWindow = Window & { __cubeInit?: boolean };
+
+  if (typeof window !== "undefined" && !(window as CubeWindow).__cubeInit) {
+    (window as CubeWindow).__cubeInit = true;
+
+    const init = () => {
+      const stage = document.getElementById("cube-stage");
+      const cube = document.getElementById("cube");
+      const hint = document.getElementById("cubeHint");
+      if (!stage || !cube) return;
+      // Narrow type for the rest of the closure.
+      const stageEl: HTMLElement = stage;
+      const cubeEl: HTMLElement = cube;
+
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      // Rotation state
+      let targetX = -20;
+      let targetY = 28;
+      let currentX = targetX;
+      let currentY = targetY;
+      let ambient = 0;
+      let isDragging = false;
+      let dragStartX = 0;
+      let dragStartY = 0;
+      let dragStartTargetX = 0;
+      let dragStartTargetY = 0;
+      let lastInteract = 0;
+      let mouseVisible = false;
+
+      const rect = () => stageEl.getBoundingClientRect();
+      // 'cube' var only re-referenced once below
+
+
+      // Mouse parallax (only when not dragging)
+      function onMouseMove(e: MouseEvent) {
+        if (isDragging) return;
+        mouseVisible = true;
+        const r = rect();
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
+        // Range: ±35° in each axis as cursor moves across full viewport
+        const nx = (e.clientX - cx) / (window.innerWidth * 0.5);
+        const ny = (e.clientY - cy) / (window.innerHeight * 0.5);
+        targetY = 28 + nx * 22;
+        targetX = -20 - ny * 14;
+        lastInteract = performance.now();
+      }
+
+      function onMouseLeave() {
+        mouseVisible = false;
+        lastInteract = performance.now();
+      }
+
+      // Drag to rotate
+      function onPointerDown(e: PointerEvent) {
+        const r = rect();
+        const inside =
+          e.clientX >= r.left &&
+          e.clientX <= r.right &&
+          e.clientY >= r.top &&
+          e.clientY <= r.bottom;
+        if (!inside) return;
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        dragStartTargetX = currentX;
+        dragStartTargetY = currentY;
+        stageEl.setPointerCapture(e.pointerId);
+        stageEl.classList.add("dragging");
+        if (hint) hint.classList.add("cube-hint--hidden");
+      }
+      function onPointerMove(e: PointerEvent) {
+        if (!isDragging) return;
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+        targetY = dragStartTargetY + dx * 0.55;
+        targetX = dragStartTargetX - dy * 0.55;
+        targetX = Math.max(-80, Math.min(80, targetX));
+        lastInteract = performance.now();
+      }
+      function onPointerUp(e: PointerEvent) {
+        if (!isDragging) return;
+        isDragging = false;
+        try {
+          stageEl.releasePointerCapture(e.pointerId);
+        } catch {}
+        stageEl.classList.remove("dragging");
+        lastInteract = performance.now();
+      }
+
+      stageEl.addEventListener("pointerdown", onPointerDown);
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", onPointerUp);
+      window.addEventListener("mousemove", onMouseMove);
+      stageEl.addEventListener("pointerleave", onMouseLeave);
+
+      // Animation loop
+      function tick() {
+        const now = performance.now();
+        const ease = 0.08;
+
+        // Ambient drift — only when not dragging and cursor isn't actively driving
+        if (!isDragging && !mouseVisible && !prefersReducedMotion) {
+          ambient = now * 0.0002;
+          targetY = 28 + Math.sin(ambient) * 4;
+          targetX = -20 + Math.cos(ambient * 0.8) * 2;
+        }
+
+        currentX += (targetX - currentX) * ease;
+        currentY += (targetY - currentY) * ease;
+        cubeEl.style.transform = `rotateX(${currentX}deg) rotateY(${currentY}deg)`;
+
+        // Hide hint after first real interaction
+        if (hint && now - lastInteract < 1000 && (isDragging || mouseVisible)) {
+          hint.classList.add("cube-hint--hidden");
+        }
+
+        requestAnimationFrame(tick);
+      }
+      tick();
+
+      // Hide hint after 5s regardless
+      setTimeout(() => hint?.classList.add("cube-hint--hidden"), 6000);
+    };
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  }
+</script>
 
 <style>
   .cube-stage {
@@ -62,20 +202,28 @@
     max-width: 480px;
     margin-inline: auto;
     perspective: 1600px;
+    cursor: grab;
+    touch-action: none;
   }
+  .cube-stageEl.dragging { cursor: grabbing; }
 
   .cube-glow {
     position: absolute;
     inset: 8% -10% -8% -10%;
     background: radial-gradient(
       ellipse at 60% 50%,
-      rgba(232, 181, 154, 0.16) 0%,
+      rgba(232, 181, 154, 0.18) 0%,
       rgba(212, 165, 91, 0.08) 30%,
       transparent 65%
     );
     filter: blur(48px);
     z-index: -1;
     pointer-events: none;
+    animation: glow-pulse 8s ease-in-out infinite;
+  }
+  @keyframes glow-pulse {
+    0%, 100% { opacity: 0.85; }
+    50% { opacity: 1; }
   }
 
   .cube {
@@ -83,17 +231,7 @@
     inset: 18%;
     transform-style: preserve-3d;
     transform: rotateX(-20deg) rotateY(28deg);
-    animation: cube-float 8s ease-in-out infinite;
-  }
-
-  @keyframes cube-float {
-    0%,
-    100% {
-      transform: rotateX(-20deg) rotateY(28deg) translateY(0);
-    }
-    50% {
-      transform: rotateX(-22deg) rotateY(32deg) translateY(-6px);
-    }
+    transition: none;
   }
 
   .face {
@@ -106,10 +244,9 @@
       rgba(232, 229, 221, 0.01) 70%
     );
     backdrop-filter: blur(3px);
-    box-shadow: inset 0 0 40px rgba(232, 229, 221, 0.03);
+    box-shadow: inset 0 0 40px rgba(232, 229, 221, 0.04);
   }
 
-  /* Cube is 320px wide at base (inset 18% on a 480 stage). Half-side = 160px */
   .face--front  { transform: translateZ(160px); }
   .face--back   { transform: translateZ(-160px) rotateY(180deg); }
   .face--left   { transform: rotateY(-90deg) translateZ(160px); }
@@ -117,7 +254,6 @@
   .face--top    { transform: rotateX(90deg) translateZ(160px); }
   .face--bottom { transform: rotateX(-90deg) translateZ(160px); }
 
-  /* Front face: 4 quadrants */
   .face--front {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -133,11 +269,7 @@
     flex-direction: column;
     justify-content: space-between;
     gap: 0.4rem;
-    background: linear-gradient(
-      135deg,
-      rgba(232, 229, 221, 0.04) 0%,
-      transparent 100%
-    );
+    background: linear-gradient(135deg, rgba(232, 229, 221, 0.04) 0%, transparent 100%);
     overflow: hidden;
   }
   .quad::before {
@@ -145,11 +277,7 @@
     position: absolute;
     inset: 0;
     opacity: 0.18;
-    background: radial-gradient(
-      circle at 25% 25%,
-      var(--quad-color) 0%,
-      transparent 60%
-    );
+    background: radial-gradient(circle at 25% 25%, var(--quad-color) 0%, transparent 60%);
     pointer-events: none;
   }
   .quad--cs      { --quad-color: var(--color-cs); }
@@ -157,10 +285,7 @@
   .quad--founder { --quad-color: var(--color-founder); }
   .quad--comms   { --quad-color: var(--color-comms); }
 
-  .quad__icon {
-    color: var(--quad-color);
-    position: relative;
-  }
+  .quad__icon { color: var(--quad-color); position: relative; }
   .quad__label {
     font-family: var(--font-mono);
     font-size: 9px;
@@ -177,14 +302,43 @@
     position: relative;
   }
 
+  .cube-hint {
+    position: absolute;
+    bottom: 4%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-mute);
+    pointer-events: none;
+    opacity: 0.8;
+    transition: opacity 600ms ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .cube-hint::before {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 1px;
+    background: var(--color-mute);
+  }
+  .cube-hint::after {
+    content: "";
+    display: inline-block;
+    width: 14px;
+    height: 1px;
+    background: var(--color-mute);
+  }
+  .cube-hint--hidden { opacity: 0; }
+
   @media (max-width: 720px) {
     .cube-stage { max-width: 320px; }
     .cube { inset: 14%; }
     .quad { padding: 0.7rem 0.65rem; }
     .quad__role { font-size: 10px; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cube { animation: none; }
   }
 </style>
