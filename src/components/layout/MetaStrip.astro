@@ -5,11 +5,33 @@ interface Props {
 }
 const { middle = "STUDIO · Nº01", right = "2026 →" } = Astro.props;
 ---
-<div
-  class="px-[var(--spacing-gutter-sm)] md:px-[var(--spacing-gutter-md)] lg:px-[var(--spacing-gutter-lg)]"
-  style="display: grid; grid-template-columns: 1fr 1fr 1fr; padding-top: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--color-hairline); font-family: var(--font-sans); font-size: var(--text-xs); letter-spacing: var(--tracking-label); text-transform: uppercase; font-weight: 500; color: var(--color-ink);"
->
-  <span>THE AGENT SEES</span>
-  <span style="text-align: center; color: var(--color-mute);">{middle}</span>
-  <span style="text-align: right; color: var(--color-mute);">{right}</span>
+<div class="meta">
+  <span class="meta__primary">THE AGENT SEES</span>
+  <span class="meta__center">{middle}</span>
+  <span class="meta__right">{right}</span>
 </div>
+
+<style>
+  .meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding-inline: var(--spacing-gutter-sm);
+    padding-block: 0.85rem;
+    border-bottom: 1px solid var(--color-hairline);
+    font-family: var(--font-sans);
+    font-size: 11px;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--color-mute);
+  }
+  @media (min-width: 48rem) {
+    .meta { padding-inline: var(--spacing-gutter-md); }
+  }
+  @media (min-width: 64rem) {
+    .meta { padding-inline: var(--spacing-gutter-lg); }
+  }
+  .meta__primary { color: var(--color-paper); }
+  .meta__center { text-align: center; }
+  .meta__right { text-align: right; }
+</style>

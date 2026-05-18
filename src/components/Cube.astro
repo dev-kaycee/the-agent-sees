@@ -1,0 +1,190 @@
+---
+/**
+ * The Cube — brand centerpiece. 6-face CSS-3D crystal cube; front face shows
+ * the four specialist agents as quadrants, each tinted by its role accent.
+ * Slowly floats. Respects prefers-reduced-motion.
+ */
+---
+<div class="cube-stage" aria-hidden="true">
+  <div class="cube">
+    <div class="face face--front">
+      <div class="quad quad--cs">
+        <div class="quad__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        </div>
+        <div class="quad__label">CS</div>
+        <div class="quad__role">Customer Success</div>
+      </div>
+      <div class="quad quad--ops">
+        <div class="quad__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+          </svg>
+        </div>
+        <div class="quad__label">OPS</div>
+        <div class="quad__role">Operations</div>
+      </div>
+      <div class="quad quad--founder">
+        <div class="quad__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3" />
+          </svg>
+        </div>
+        <div class="quad__label">FOUNDER</div>
+        <div class="quad__role">Founder</div>
+      </div>
+      <div class="quad quad--comms">
+        <div class="quad__icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 5L6 9H2v6h4l5 4V5zM19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+          </svg>
+        </div>
+        <div class="quad__label">COMMS</div>
+        <div class="quad__role">Communications</div>
+      </div>
+    </div>
+    <div class="face face--back"></div>
+    <div class="face face--left"></div>
+    <div class="face face--right"></div>
+    <div class="face face--top"></div>
+    <div class="face face--bottom"></div>
+  </div>
+  <div class="cube-glow"></div>
+</div>
+
+<style>
+  .cube-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 480px;
+    margin-inline: auto;
+    perspective: 1600px;
+  }
+
+  .cube-glow {
+    position: absolute;
+    inset: 8% -10% -8% -10%;
+    background: radial-gradient(
+      ellipse at 60% 50%,
+      rgba(232, 181, 154, 0.16) 0%,
+      rgba(212, 165, 91, 0.08) 30%,
+      transparent 65%
+    );
+    filter: blur(48px);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .cube {
+    position: absolute;
+    inset: 18%;
+    transform-style: preserve-3d;
+    transform: rotateX(-20deg) rotateY(28deg);
+    animation: cube-float 8s ease-in-out infinite;
+  }
+
+  @keyframes cube-float {
+    0%,
+    100% {
+      transform: rotateX(-20deg) rotateY(28deg) translateY(0);
+    }
+    50% {
+      transform: rotateX(-22deg) rotateY(32deg) translateY(-6px);
+    }
+  }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(232, 229, 221, 0.16);
+    background: linear-gradient(
+      135deg,
+      rgba(232, 229, 221, 0.06) 0%,
+      rgba(232, 229, 221, 0.01) 70%
+    );
+    backdrop-filter: blur(3px);
+    box-shadow: inset 0 0 40px rgba(232, 229, 221, 0.03);
+  }
+
+  /* Cube is 320px wide at base (inset 18% on a 480 stage). Half-side = 160px */
+  .face--front  { transform: translateZ(160px); }
+  .face--back   { transform: translateZ(-160px) rotateY(180deg); }
+  .face--left   { transform: rotateY(-90deg) translateZ(160px); }
+  .face--right  { transform: rotateY(90deg) translateZ(160px); }
+  .face--top    { transform: rotateX(90deg) translateZ(160px); }
+  .face--bottom { transform: rotateX(-90deg) translateZ(160px); }
+
+  /* Front face: 4 quadrants */
+  .face--front {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1px;
+    background: rgba(15, 14, 13, 0.55);
+  }
+
+  .quad {
+    position: relative;
+    padding: 1.1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.4rem;
+    background: linear-gradient(
+      135deg,
+      rgba(232, 229, 221, 0.04) 0%,
+      transparent 100%
+    );
+    overflow: hidden;
+  }
+  .quad::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    background: radial-gradient(
+      circle at 25% 25%,
+      var(--quad-color) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+  .quad--cs      { --quad-color: var(--color-cs); }
+  .quad--ops     { --quad-color: var(--color-ops); }
+  .quad--founder { --quad-color: var(--color-founder); }
+  .quad--comms   { --quad-color: var(--color-comms); }
+
+  .quad__icon {
+    color: var(--quad-color);
+    position: relative;
+  }
+  .quad__label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--quad-color);
+    position: relative;
+  }
+  .quad__role {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-paper);
+    line-height: 1.2;
+    position: relative;
+  }
+
+  @media (max-width: 720px) {
+    .cube-stage { max-width: 320px; }
+    .cube { inset: 14%; }
+    .quad { padding: 0.7rem 0.65rem; }
+    .quad__role { font-size: 10px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cube { animation: none; }
+  }
+</style>

@@ -1,58 +1,179 @@
 ---
 import Arrow from "../icons/Arrow.astro";
+
 const links = [
-  { href: "/work", label: "Work" },
   { href: "/studio", label: "Studio" },
-  { href: "/contact", label: "Contact" },
+  { href: "/work", label: "Approach" },
+  { href: "/work#demo", label: "Specialists" },
+  { href: "/work", label: "Work" },
 ];
 const path = Astro.url.pathname;
 ---
-<nav
-  aria-label="Main"
-  class="px-[var(--spacing-gutter-sm)] md:px-[var(--spacing-gutter-md)] lg:px-[var(--spacing-gutter-lg)]"
-  style="display: flex; align-items: center; justify-content: space-between; padding-top: 1.25rem; padding-bottom: 1.25rem;"
->
-  <a href="/" style="font-family: var(--font-display); font-size: var(--text-base); letter-spacing: -0.01em; font-weight: 800;">
-    THE AGENT SEES
+<nav aria-label="Main" class="nav">
+  <a class="nav__brand" href="/">
+    <span class="nav__brand-mark" aria-hidden="true">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.25" />
+        <polygon points="12,4 18,8 18,16 12,20 6,16 6,8" stroke="var(--color-founder)" stroke-width="1" fill="none" />
+      </svg>
+    </span>
+    <span class="nav__brand-text">
+      THE AGENT SEES
+      <span class="nav__brand-sub">AI STUDIO</span>
+    </span>
   </a>
 
-  <!-- desktop nav -->
-  <ul class="hidden md:flex" style="list-style: none; margin: 0; padding: 0; gap: 2rem; align-items: center;">
+  <ul class="nav__links">
     {links.map((l) => (
       <li>
-        <a
-          href={l.href}
-          style={`font-size: var(--text-sm); font-weight: 500; ${path === l.href ? "text-decoration: underline; text-underline-offset: 4px;" : ""}`}
-        >
+        <a href={l.href} class={`nav__link ${path === l.href ? "nav__link--active" : ""}`}>
           {l.label}
         </a>
       </li>
     ))}
     <li>
-      <a
-        href="/contact"
-        style="display: inline-flex; align-items: center; gap: 0.5rem; background: var(--color-ink); color: var(--color-paper); padding: 0.6rem 1rem; font-size: var(--text-sm); font-weight: 500;"
-      >
-        Start a project
+      <a href="/contact" class="nav__cta">
+        Book a Strategy Call
         <Arrow size={14} />
       </a>
     </li>
   </ul>
 
-  <!-- mobile nav (no JS — uses <details>) -->
-  <details class="md:hidden" style="position: relative;">
-    <summary
-      aria-label="Open menu"
-      style="list-style: none; cursor: pointer; padding: 0.5rem;"
-    >
-      <span style="display: block; width: 24px; height: 2px; background: var(--color-ink); margin: 3px 0;"></span>
-      <span style="display: block; width: 24px; height: 2px; background: var(--color-ink); margin: 3px 0;"></span>
-      <span style="display: block; width: 24px; height: 2px; background: var(--color-ink); margin: 3px 0;"></span>
+  <details class="nav__mobile">
+    <summary aria-label="Open menu" class="nav__burger">
+      <span></span><span></span><span></span>
     </summary>
-    <ul style="position: absolute; right: 0; top: 100%; background: var(--color-paper); border: 1px solid var(--color-ink); list-style: none; margin: 0; padding: 1rem 1.5rem; min-width: 12rem; display: flex; flex-direction: column; gap: 0.75rem; z-index: 10;">
+    <ul class="nav__drawer">
       {links.map((l) => (
-        <li><a href={l.href} style="font-size: var(--text-sm); font-weight: 500;">{l.label}</a></li>
+        <li><a href={l.href}>{l.label}</a></li>
       ))}
+      <li><a href="/contact" class="nav__cta">Book a Strategy Call →</a></li>
     </ul>
   </details>
 </nav>
+
+<style>
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-inline: var(--spacing-gutter-sm);
+    padding-block: 1.25rem;
+    position: relative;
+    z-index: 10;
+  }
+  @media (min-width: 48rem) {
+    .nav { padding-inline: var(--spacing-gutter-md); }
+  }
+  @media (min-width: 64rem) {
+    .nav { padding-inline: var(--spacing-gutter-lg); }
+  }
+
+  .nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--color-paper);
+  }
+  .nav__brand-mark {
+    display: inline-flex;
+    color: var(--color-paper);
+  }
+  .nav__brand-text {
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1.1;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+  }
+  .nav__brand-sub {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--color-mute);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+
+  .nav__links {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 1.75rem;
+    align-items: center;
+  }
+  @media (min-width: 64rem) {
+    .nav__links { display: flex; }
+    .nav__mobile { display: none; }
+  }
+
+  .nav__link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-paper);
+    transition: color 200ms;
+  }
+  .nav__link:hover {
+    color: var(--color-mute-strong);
+  }
+  .nav__link--active {
+    color: var(--color-founder);
+  }
+
+  .nav__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    padding: 0.65rem 1.15rem;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 2px;
+    transition: transform 180ms, box-shadow 180ms;
+  }
+  .nav__cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(232, 229, 221, 0.18);
+  }
+
+  /* mobile */
+  .nav__mobile { position: relative; }
+  .nav__burger {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .nav__burger::-webkit-details-marker { display: none; }
+  .nav__burger > span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--color-paper);
+  }
+  .nav__drawer {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: var(--color-ink-2);
+    border: 1px solid var(--color-hairline-strong);
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 1rem 1.25rem;
+    min-width: 14rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 50;
+    border-radius: 2px;
+  }
+  .nav__drawer a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-paper);
+  }
+</style>
